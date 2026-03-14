@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="vi" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="https://uploads.onecompiler.io/43u4wb3ft/43u4wunbx/taoanhdep_avatar_anime.jpg">
+    <title>FOXSTUDIO - Nơi Sáng Tạo Không Giới Hạn</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        fox: {
+                            red: '#ff4141',
+                            dark: '#0a0a0a',
+                            glass: 'rgba(255, 255, 255, 0.03)',
+                            border: 'rgba(255, 255, 255, 0.08)'
+                        }
+                    },
+                    animation: {
+                        blob: "blob 7s infinite",
+                        float: "float 6s ease-in-out infinite",
+                    },
+                    keyframes: {
+                        blob: {
+                            "0%": { transform: "translate(0px, 0px) scale(1)" },
+                            "33%": { transform: "translate(30px, -50px) scale(1.1)" },
+                            "66%": { transform: "translate(-20px, 20px) scale(0.9)" },
+                            "100%": { transform: "translate(0px, 0px) scale(1)" },
+                        },
+                        float: {
+                            "0%, 100%": { transform: "translateY(0)" },
+                            "50%": { transform: "translateY(-20px)" },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #050505;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism Core Classes */
+        .glass-panel {
+            background: rgba(25, 25, 30, 0.4);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+        }
+
+        .glass-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.01) 100%);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .glass-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            border-color: rgba(255, 65, 65, 0.3);
+            box-shadow: 0 15px 40px 0 rgba(255, 65, 65, 0.15);
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 65, 65, 0.05) 100%);
+        }
+
+        /* Text Gradients */
+        .text-gradient {
+            background: linear-gradient(to right, #ff4141, #ff8f8f, #ff4141);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: shine 3s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        /* Glowing Button */
+        .btn-glow {
+            position: relative;
+            background: rgba(255, 65, 65, 0.1);
+            border: 1px solid #ff4141;
+            color: #ff4141;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 65, 65, 0.4), transparent);
+            transition: all 0.5s ease;
+        }
+
+        .btn-glow:hover {
+            background: #ff4141;
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 65, 65, 0.6);
+        }
+
+        .btn-glow:hover::before {
+            left: 100%;
+        }
+
+        /* Special Anime Button */
+        .btn-anime {
+            background: linear-gradient(45deg, #ff4141, #9d4edd);
+            border: none;
+            color: white;
+            box-shadow: 0 0 15px rgba(157, 78, 221, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-anime:hover {
+            box-shadow: 0 0 25px rgba(157, 78, 221, 0.8), 0 0 15px rgba(255, 65, 65, 0.8);
+            transform: scale(1.05);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #ff4141; }
+
+        /* Liquid Shapes */
+        .liquid-shape {
+            position: absolute;
+            border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.5;
+            animation: morph 8s ease-in-out infinite alternate;
+        }
+
+        @keyframes morph {
+            0% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 50% 40% 50%; }
+        }
+
+        /* Scroll Reveal Utility */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-fox-red selection:text-white relative">
+
+    <!-- Liquid Background Elements (Fixed) -->
+    <div class="fixed top-0 left-0 w-full h-full overflow-hidden pointer-events-none z-0">
+        <div class="liquid-shape bg-red-600/30 w-96 h-96 top-[-10%] left-[-10%] animate-blob"></div>
+        <div class="liquid-shape bg-purple-600/20 w-[30rem] h-[30rem] top-[40%] right-[-10%] animate-blob" style="animation-delay: 2s;"></div>
+        <div class="liquid-shape bg-pink-600/20 w-80 h-80 bottom-[-10%] left-[20%] animate-blob" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-panel border-b border-white/10 transition-all duration-300" id="navbar">
+        <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="text-3xl font-black tracking-tighter flex items-center gap-2 group">
+                <span class="text-white group-hover:text-fox-red transition-colors">FOX</span><span class="text-transparent bg-clip-text bg-gradient-to-r from-fox-red to-purple-500">STUDIO</span>
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#home" class="text-sm font-semibold text-gray-300 hover:text-white transition-colors">Trang Chủ</a>
+                <a href="#about" class="text-sm font-semibold text-gray-300 hover:text-white transition-colors">Giới Thiệu</a>
+                <a href="#services" class="text-sm font-semibold text-gray-300 hover:text-white transition-colors">Dịch Vụ</a>
+                <a href="#gallery" class="text-sm font-semibold text-gray-300 hover:text-white transition-colors">Dự Án</a>
+                
+                <!-- Special Link -->
+                <a href="https://foxanime.vercel.app/" target="_blank" class="btn-anime px-5 py-2 rounded-full text-sm font-bold flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                    FOX Anime
+                </a>
+            </div>
+
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="relative h-screen flex items-center justify-center pt-20 z-10">
+        <div class="container mx-auto px-6 grid md:grid-cols-2 gap-12 items-center">
+            
+            <div class="text-left space-y-8 reveal active">
+                <div class="inline-block glass-panel px-4 py-1 rounded-full border border-fox-red/30 mb-4">
+                    <span class="text-fox-red text-sm font-semibold uppercase tracking-wider">⚡ Studio Sáng Tạo Số 1</span>
+                </div>
+                <h1 class="text-5xl md:text-7xl font-black leading-tight">
+                    Kiến tạo <br>
+                    <span class="text-gradient">Vũ Trụ Ảo</span> <br>
+                    của riêng bạn.
+                </h1>
+                <p class="text-gray-400 text-lg md:text-xl max-w-lg leading-relaxed">
+                    Đột phá giới hạn thiết kế đồ họa, phát triển Game và nội dung số với công nghệ lõi đỉnh cao.
+                </p>
+                
+                <div class="flex flex-wrap items-center gap-4 pt-4">
+                    <a href="#contact" class="btn-glow px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-sm flex items-center gap-2">
+                        Bắt đầu ngay
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                    <a href="https://foxanime.vercel.app/" target="_blank" class="btn-anime px-8 py-4 rounded-xl font-bold uppercase tracking-wider text-sm">
+                        Khám phá FoxAnime
+                    </a>
+                </div>
+
+                <!-- Social Links Hero -->
+                <div class="flex items-center gap-4 pt-8 border-t border-white/10 w-max">
+                    <span class="text-sm text-gray-500 font-semibold mr-2">Kết nối:</span>
+                    <!-- YouTube Fox Studio Live -->
+                    <a href="https://youtube.com/@FoxStudioLive" target="_blank" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-red-600 hover:border-red-600 transition-all" title="Fox Studio Live">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                    </a>
+                    <!-- Facebook -->
+                    <a href="#" target="_blank" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-gray-400 hover:text-blue-500 hover:border-blue-500 transition-all" title="Facebook">
+                         <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                    </a>
+                </div>
+            </div>
+
+            <div class="hidden md:block relative animate-float reveal">
+                <!-- Floating Glass Card Graphic -->
+                <div class="glass-card w-[400px] h-[500px] mx-auto rounded-3xl p-6 relative overflow-hidden border-t border-l border-white/20">
+                    <div class="absolute -top-20 -right-20 w-40 h-40 bg-fox-red rounded-full filter blur-3xl opacity-50"></div>
+                    <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-purple-600 rounded-full filter blur-3xl opacity-40"></div>
+                    
+                    <img src="https://uploads.onecompiler.io/43u4wb3ft/43u4wunbx/taoanhdep_avatar_anime.jpg" alt="FOXSTUDIO Character" class="w-full h-full object-cover rounded-2xl border border-white/10 shadow-2xl relative z-10">
+                    
+                    <!-- Floating badges -->
+                    <div class="absolute bottom-10 -left-6 glass-panel py-3 px-6 rounded-2xl flex items-center gap-3 z-20">
+                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-fox-red to-orange-500 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                        </div>
+                        <div>
+                            <p class="text-xs text-gray-400">Hiệu suất</p>
+                            <p class="font-bold text-white">Vượt trội</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Us Section -->
+    <section id="about" class="py-24 relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="glass-card rounded-3xl p-8 md:p-16 relative overflow-hidden reveal">
+                <div class="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-fox-red/10 to-transparent pointer-events-none"></div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <h2 class="text-3xl md:text-5xl font-black mb-6">Về <span class="text-gradient">FOXSTUDIO</span></h2>
+                        <p class="text-lg text-gray-300 leading-relaxed mb-6">
+                            Chúng tôi là một đội ngũ đam mê sáng tạo, chuyên cung cấp các giải pháp thiết kế đồ họa, phát triển game và sản xuất nội dung số chất lượng cao. Với tinh thần <span class="text-fox-red font-bold">"Republic of Gamers"</span> và sự nhạy bén của loài cáo.
+                        </p>
+                        <p class="text-lg text-gray-300 leading-relaxed mb-8">
+                            Sứ mệnh của chúng tôi là biến những ý tưởng táo bạo thành hiện thực, đồng hành cùng bạn trên con đường chinh phục những đỉnh cao mới trong kỷ nguyên Digital.
+                        </p>
+                        <div class="flex gap-4">
+                            <div class="glass-panel p-4 rounded-xl flex-1 text-center">
+                                <h3 class="text-3xl font-black text-fox-red mb-1">50+</h3>
+                                <p class="text-sm text-gray-400">Dự án hoàn thành</p>
+                            </div>
+                            <div class="glass-panel p-4 rounded-xl flex-1 text-center">
+                                <h3 class="text-3xl font-black text-purple-500 mb-1">99%</h3>
+                                <p class="text-sm text-gray-400">Khách hàng hài lòng</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="relative hidden md:block">
+                        <div class="w-full aspect-square rounded-full border border-white/10 p-4 border-dashed animate-[spin_20s_linear_infinite]">
+                            <div class="w-full h-full rounded-full border border-fox-red/30 p-4 border-dashed animate-[spin_15s_linear_infinite_reverse]">
+                                <img src="https://uploads.onecompiler.io/43u4wb3ft/43u4wunbx/taoanhdep_avatar_anime.jpg" alt="Logo/Avatar" class="w-full h-full object-cover rounded-full shadow-[0_0_50px_rgba(255,65,65,0.3)]">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="py-24 relative z-10">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16 reveal">
+                <span class="text-fox-red font-bold tracking-widest uppercase text-sm">Chuyên môn của chúng tôi</span>
+                <h2 class="text-4xl md:text-5xl font-black mt-2">Dịch Vụ Cốt Lõi</h2>
+            </div>
+            
+            <div class="grid md:grid-cols-3 gap-8">
+                <!-- Service 1 -->
+                <div class="glass-card p-8 rounded-3xl reveal group cursor-pointer">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-fox-red to-orange-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-fox-red transition-colors">Thiết Kế Đồ Họa</h3>
+                    <p class="text-gray-400 leading-relaxed">Sáng tạo bộ nhận diện thương hiệu, UI/UX hiện đại, Artwork 2D/3D chuyên sâu mang đậm chất riêng.</p>
+                </div>
+                
+                <!-- Service 2 -->
+                <div class="glass-card p-8 rounded-3xl reveal group cursor-pointer" style="transition-delay: 100ms;">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-indigo-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-purple-400 transition-colors">Phát Triển Game</h3>
+                    <p class="text-gray-400 leading-relaxed">Lập trình Game đa nền tảng (Mobile, PC, Web3). Tối ưu hóa logic và mang lại trải nghiệm nhập vai tuyệt đỉnh.</p>
+                </div>
+
+                <!-- Service 3 -->
+                <div class="glass-card p-8 rounded-3xl reveal group cursor-pointer" style="transition-delay: 200ms;">
+                    <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 4v16M17 4v16M3 8h4m10 0h4M3 12h18M3 16h4m10 0h4M4 20h16a1 1 0 001-1V5a1 1 0 00-1-1H4a1 1 0 00-1 1v14a1 1 0 001 1z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 text-white group-hover:text-blue-400 transition-colors">Nội Dung Số & Anime</h3>
+                    <p class="text-gray-400 leading-relaxed">Sản xuất Video Animation, hiệu ứng VFX, biên tập nội dung số chuyên nghiệp. Liên kết chặt chẽ với hệ sinh thái FoxAnime.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Project Gallery (Glass Grid) -->
+    <section id="gallery" class="py-24 relative z-10 bg-black/30 backdrop-blur-md border-y border-white/5">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 reveal">
+                <div>
+                    <h2 class="text-4xl md:text-5xl font-black">Thư Viện <span class="text-gradient">Dự Án</span></h2>
+                    <p class="text-gray-400 mt-4 max-w-xl">Những tuyệt tác hình ảnh và mã nguồn được nhào nặn từ đôi bàn tay của đội ngũ FoxStudio.</p>
+                </div>
+                <a href="#" class="mt-6 md:mt-0 text-fox-red font-bold hover:text-white transition-colors flex items-center gap-2">
+                    Xem tất cả <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Gallery Item 1 -->
+                <div class="glass-card rounded-2xl overflow-hidden group aspect-video relative reveal">
+                    <img src="https://placehold.co/800x600/1a1a1a/ff4141?text=Cyber+City" alt="Project 1" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-fox-red text-xs font-bold uppercase tracking-wider mb-1">Game Environment</span>
+                        <h4 class="text-xl font-bold text-white">Cyber Neon City</h4>
+                    </div>
+                </div>
+                <!-- Gallery Item 2 -->
+                <div class="glass-card rounded-2xl overflow-hidden group aspect-video relative reveal" style="transition-delay: 100ms;">
+                    <img src="https://placehold.co/800x600/111111/9d4edd?text=Anime+Char" alt="Project 2" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-purple-400 text-xs font-bold uppercase tracking-wider mb-1">2D Illustration</span>
+                        <h4 class="text-xl font-bold text-white">Fox Maiden Design</h4>
+                    </div>
+                </div>
+                 <!-- Gallery Item 3 -->
+                 <div class="glass-card rounded-2xl overflow-hidden group aspect-video relative reveal" style="transition-delay: 200ms;">
+                    <img src="https://placehold.co/800x600/0a0a0a/00b4d8?text=Web+UI" alt="Project 3" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-blue-400 text-xs font-bold uppercase tracking-wider mb-1">UI/UX Design</span>
+                        <h4 class="text-xl font-bold text-white">E-Sport Platform</h4>
+                    </div>
+                </div>
+                
+                <!-- Gallery Item 4 (Slide Thuyết Trình) -->
+                <!-- CHỦ NHÂN CHÚ Ý: Thay chữ "#" ở href bên dưới bằng link trỏ tới tệp Slide của ngài nhé! -->
+                <a href="slideTH.html" target="_blank" class="block glass-card rounded-2xl overflow-hidden group aspect-video relative reveal" style="transition-delay: 300ms;" title="Nhấn để xem Slide">
+                    <img src="https://uploads.onecompiler.io/43u4wb3ft/43u4y39cc/Screenshot%202026-03-14%20215832.png" alt="Slide Thuyết Trình" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-amber-400 text-xs font-bold uppercase tracking-wider mb-1">Thiết Kế Slide</span>
+                        <h4 class="text-xl font-bold text-white">BÀI THUYẾT TRÌNH NHÓM 1</h4>
+                        <div class="mt-2 text-xs text-gray-300 flex items-center gap-1">
+                            <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+                            Nhấn để mở tệp liên kết
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-24 relative z-10">
+        <div class="container mx-auto px-6 max-w-4xl">
+            <div class="glass-card rounded-3xl p-8 md:p-12 reveal">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl md:text-5xl font-black mb-4">Kết Nối Với <span class="text-gradient">Chúng Tôi</span></h2>
+                    <p class="text-gray-400">Bạn có ý tưởng điên rồ? Hãy để FoxStudio biến nó thành hiện thực.</p>
+                </div>
+
+                <form action="#" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Tên của bạn</label>
+                            <input type="text" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fox-red focus:bg-white/10 transition-all placeholder-gray-600" placeholder="John Doe">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-400 mb-2">Email liên hệ</label>
+                            <input type="email" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fox-red focus:bg-white/10 transition-all placeholder-gray-600" placeholder="hello@example.com">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-400 mb-2">Nội dung thông điệp</label>
+                        <textarea rows="4" class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-fox-red focus:bg-white/10 transition-all placeholder-gray-600 resize-none" placeholder="Tôi muốn làm một tựa game thế giới mở..."></textarea>
+                    </div>
+                    <button type="button" class="btn-glow w-full py-4 rounded-xl font-bold text-lg uppercase tracking-widest mt-4">
+                        Gửi Yêu Cầu
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-panel border-t border-white/10 pt-16 pb-8 relative z-10 mt-12">
+        <div class="container mx-auto px-6">
+            <div class="grid md:grid-cols-4 gap-10 mb-12">
+                <div class="md:col-span-2">
+                    <a href="#" class="text-3xl font-black tracking-tighter flex items-center gap-2 mb-4">
+                        <span class="text-white">FOX</span><span class="text-transparent bg-clip-text bg-gradient-to-r from-fox-red to-purple-500">STUDIO</span>
+                    </a>
+                    <p class="text-gray-400 mb-6 max-w-sm">Nâng tầm sáng tạo, kiến tạo thế giới ảo. Chúng tôi mang đến trải nghiệm thị giác và công nghệ đỉnh cao.</p>
+                    
+                    <!-- Social Icons Box -->
+                    <div class="flex gap-3">
+                        <!-- YouTube Fox Studio Live -->
+                        <a href="https://youtube.com/@FoxStudioLive" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-red-600 border border-white/10 flex items-center justify-center transition-all text-gray-300 hover:text-white" title="Fox Studio Live">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+                        </a>
+                        <!-- Facebook -->
+                        <a href="#" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-blue-600 border border-white/10 flex items-center justify-center transition-all text-gray-300 hover:text-white" title="Facebook">
+                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+                        </a>
+                        <!-- FoxAnime -->
+                        <a href="https://foxanime.vercel.app/" target="_blank" class="w-10 h-10 rounded-lg bg-white/5 hover:bg-purple-600 border border-white/10 flex items-center justify-center transition-all text-gray-300 hover:text-white group" title="FoxAnime Portal">
+                            <svg class="w-5 h-5 group-hover:animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-sm">Liên Kết</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#home" class="hover:text-fox-red transition-colors">Trang Chủ</a></li>
+                        <li><a href="#about" class="hover:text-fox-red transition-colors">Về Chúng Tôi</a></li>
+                        <li><a href="#services" class="hover:text-fox-red transition-colors">Dịch Vụ</a></li>
+                        <li><a href="https://foxanime.vercel.app/" target="_blank" class="hover:text-purple-400 transition-colors">FoxAnime</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-white font-bold mb-4 uppercase tracking-wider text-sm">Pháp Lý</h4>
+                    <ul class="space-y-2 text-gray-400 text-sm">
+                        <li><a href="#" class="hover:text-fox-red transition-colors">Điều Khoản Dịch Vụ</a></li>
+                        <li><a href="#" class="hover:text-fox-red transition-colors">Chính Sách Bảo Mật</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="text-center pt-8 border-t border-white/5 text-gray-500 text-sm flex flex-col md:flex-row justify-between items-center">
+                <p>&copy; <span id="year"></span> FOXSTUDIO. All rights reserved.</p>
+                <p class="mt-2 md:mt-0 flex items-center gap-1">Crafted with <span class="text-fox-red">♥</span> by FoxTeam</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Cập nhật năm hiện tại
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Hiệu ứng kính mờ cho Navbar khi cuộn
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-black/60');
+                nav.classList.remove('bg-transparent', 'border-transparent');
+            } else {
+                nav.classList.remove('bg-black/60');
+                nav.classList.add('bg-transparent', 'border-transparent');
+            }
+        });
+
+        // Xử lý cuộn trang mượt mà cho các menu link
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Scroll Reveal Animation (Hiệu ứng hiện ra khi cuộn tới)
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // Không unobserve để có thể thấy lại hiệu ứng nếu scroll lên/xuống nhiều lần (tùy ý)
+                    revealObserver.unobserve(entry.target); 
+                }
+            });
+        }, {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+    </script>
+</body>
+</html>

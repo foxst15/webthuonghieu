@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thuyết trình Nhóm 1 - Đường lối CNH của Đảng</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Be Vietnam Pro', sans-serif;
+            background-color: #f0f2f5;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        /* Hiệu ứng chuyển cảnh (Slide Transition) */
+        .slide {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            width: 100vw;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease-in-out, visibility 0.6s ease-in-out;
+            display: flex;
+            z-index: 0;
+        }
+        
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            z-index: 10;
+        }
+
+        /* Hiệu ứng chữ và hình bay vào (Fly-in Animation) */
+        .fly-item {
+            opacity: 0;
+            transform: translateY(40px) scale(0.98);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transition-delay: var(--delay, 0s);
+        }
+
+        .slide.active .fly-item {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Các style cũ được giữ nguyên */
+        .content-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #b91c1c 100%);
+        }
+        .speaker-notes {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+        }
+        .stage-badge {
+            background: #b91c1c;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+        .nav-btn {
+            transition: transform 0.2s, background-color 0.2s;
+        }
+        .nav-btn:hover {
+            transform: scale(1.05);
+            background-color: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Slide 1: Bìa giới thiệu -->
+    <div class="slide active gradient-bg items-center justify-center p-8" id="slide1">
+        <div class="content-card w-full max-w-5xl p-12 text-center relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-yellow-500 fly-item" style="--delay: 0.1s"></div>
+            <h2 class="text-xl font-bold text-red-700 mb-2 uppercase tracking-widest fly-item" style="--delay: 0.2s">Học phần: Đường lối cách mạng của ĐCSVN</h2>
+            <h1 class="text-5xl font-extrabold text-blue-900 mb-8 leading-tight fly-item" style="--delay: 0.3s">ĐƯỜNG LỐI CỦA ĐẢNG VỀ<br>CÔNG NGHIỆP HÓA TỪ 1945 ĐẾN NAY</h1>
+            
+            <div class="grid grid-cols-2 gap-8 mt-10">
+                <div class="text-left border-r border-gray-200 pr-8 fly-item" style="--delay: 0.4s">
+                    <p class="text-lg font-bold text-red-600 mb-4"><i class="fas fa-users-viewfinder mr-2"></i> THỰC HIỆN: NHÓM 1</p>
+                    <p class="text-gray-800"><strong>Nhóm trưởng:</strong> Nguyễn Văn Hải</p>
+                    <p class="text-gray-700 mt-2"><strong>Thành viên:</strong> Nguyễn Thanh Bông, Nguyễn Hữu Nghĩa, Nguyễn Sơn Khiêm, Hồ Văn Siêu, Đinh Thiên Tú, Trần Minh Tú.</p>
+                </div>
+                <div class="speaker-notes p-4 text-left rounded-lg italic text-sm text-gray-600 fly-item" style="--delay: 0.5s">
+                    <p><strong><i class="fas fa-comment"></i> </strong> "Xin chào thầy/cô và các bạn. Hôm nay Nhóm 1 chúng em xin được trình bày về chặng đường dài phát triển tư duy của Đảng ta trong công cuộc Công nghiệp hóa đất nước, trải dài từ những năm tháng khói lửa 1945 cho đến kỷ nguyên số hiện nay. Xin mời mọi người cùng theo dõi."</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Khái quát chung -->
+    <div class="slide bg-gray-100 items-center justify-center p-8" id="slide2">
+        <div class="content-card w-full max-w-5xl p-10 flex gap-8">
+            <div class="w-1/2">
+                <h2 class="text-3xl font-bold text-blue-900 mb-6 border-b-4 border-yellow-500 pb-2 inline-block fly-item" style="--delay: 0.1s">KHÁI QUÁT CHUNG</h2>
+                <div class="space-y-6">
+                    <div class="fly-item" style="--delay: 0.2s">
+                        <h3 class="text-xl font-bold text-red-700 mb-2"><i class="fas fa-book-open mr-2"></i> Khái niệm CNH</h3>
+                        <p class="text-gray-700 leading-relaxed">Là quá trình chuyển đổi căn bản, toàn diện các hoạt động sản xuất, kinh doanh từ lao động thủ công sang sử dụng sức lao động dựa trên công nghiệp cơ khí.</p>
+                    </div>
+                    <div class="fly-item" style="--delay: 0.3s">
+                        <h3 class="text-xl font-bold text-red-700 mb-2"><i class="fas fa-history mr-2"></i> Tổng quan hành trình</h3>
+                        <p class="text-gray-700">Quá trình CNH của Việt Nam trải qua <strong>6 giai đoạn</strong> mang tính lịch sử.</p>
+                    </div>
+                </div>
+                <div class="speaker-notes p-4 mt-8 rounded-lg italic text-xs text-gray-600 fly-item" style="--delay: 0.4s">
+                    <p><strong><i class="fas fa-comment"></i></strong> "Trước khi đi vào chi tiết, chúng ta cần thống nhất hiểu CNH không chỉ là xây dựng nhà máy, mà là sự thay đổi toàn diện cách thức sản xuất. Đường lối này của Đảng không hề cứng nhắc mà liên tục vận động..."</p>
+                </div>
+            </div>
+            <div class="w-1/2 rounded-xl overflow-hidden shadow-lg border-4 border-white fly-item" style="--delay: 0.5s">
+                <img src="https://bcp.cdnchinhphu.vn/334894974524682240/2024/7/19/binh-10-nhom-nhiem-vu-giai-phap-2-17213848272341082985205.jpg" alt="Tổng quan công nghiệp" class="w-full h-full object-cover">
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Giai đoạn 1 -->
+    <div class="slide bg-stone-200 items-center justify-center p-8" id="slide3">
+        <div class="content-card w-full max-w-6xl p-8 flex flex-col">
+            <div class="flex justify-between items-start mb-6">
+                <div class="fly-item" style="--delay: 0.1s">
+                    <span class="stage-badge">Giai đoạn 1</span>
+                    <h2 class="text-3xl font-bold text-red-800 mt-2">1945 - 1954: VỪA KHÁNG CHIẾN, VỪA KIẾN QUỐC</h2>
+                </div>
+                <i class="fas fa-shield-halved text-5xl text-red-800 opacity-20 fly-item" style="--delay: 0.2s"></i>
+            </div>
+            <div class="grid grid-cols-3 gap-6">
+                <div class="col-span-1 space-y-4">
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-800 fly-item" style="--delay: 0.2s">
+                        <h4 class="font-bold text-red-800">Hoàn cảnh</h4>
+                        <p class="text-sm">"Giặc đói, giặc dốt, giặc ngoại xâm".</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-800 fly-item" style="--delay: 0.3s">
+                        <h4 class="font-bold text-red-800">Đường lối</h4>
+                        <p class="text-sm">Ưu tiên tối đa cho kháng chiến.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-sm border-l-4 border-red-800 fly-item" style="--delay: 0.4s">
+                        <h4 class="font-bold text-red-800">Đặc điểm</h4>
+                        <p class="text-sm">Tự lực cánh sinh; phân tán, quy mô nhỏ lẻ.</p>
+                    </div>
+                </div>
+                <div class="col-span-1 fly-item" style="--delay: 0.5s">
+                    <div class="rounded-lg overflow-hidden h-48 mb-4 border-2 border-gray-300">
+                        <img src="https://photo.znews.vn/w1200/Uploaded/natmts/2022_10_07/c9ce30231058d7068e49.jpg" alt="Xưởng quân giới thô sơ" class="w-full h-full object-cover filter sepia">
+                    </div>
+                    <div class="bg-red-900 text-white p-4 rounded-lg">
+                        <h4 class="font-bold border-b border-red-700 mb-2">Trọng tâm</h4>
+                        <ul class="text-sm list-disc list-inside">
+                            <li>Công nghiệp quốc phòng</li>
+                            <li>Công nghiệp tiêu dùng (thuốc, giấy, vải)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-span-1 fly-item" style="--delay: 0.6s">
+                    <div class="speaker-notes p-4 h-full rounded-lg italic text-sm text-gray-600">
+                        <p><strong><i class="fas fa-comment"></i></strong> "Trong 9 năm kháng chiến chống Pháp, Đảng ta chưa có điều kiện làm CNH bài bản. Mọi nhà máy phải sơ tán lên rừng, vào hang động. Nền công nghiệp lúc bấy giờ chủ yếu là các xưởng quân giới chế tạo súng đạn thủ công..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Giai đoạn 2 -->
+    <div class="slide bg-blue-50 items-center justify-center p-8" id="slide4">
+        <div class="content-card w-full max-w-5xl p-10 relative">
+            <span class="stage-badge mb-4 fly-item" style="--delay: 0.1s">Giai đoạn 2</span>
+            <h2 class="text-3xl font-bold text-blue-900 mb-8 fly-item" style="--delay: 0.2s">1954 - 1975: NỀN MÓNG XHCN Ở MIỀN BẮC</h2>
+            <div class="grid grid-cols-2 gap-10">
+                <div class="space-y-4">
+                    <div class="bg-blue-100 p-4 rounded-lg fly-item" style="--delay: 0.3s">
+                        <h4 class="font-bold text-blue-900"><i class="fas fa-star mr-2"></i> Hoàn cảnh</h4>
+                        <p class="text-gray-700">Miền Bắc hòa bình, đi lên CNXH; Miền Nam tiếp tục đấu tranh.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md border-t-4 border-blue-900 fly-item" style="--delay: 0.4s">
+                        <h4 class="font-bold text-blue-900">Đại hội III (1960)</h4>
+                        <p class="text-gray-700">"Công nghiệp hóa XHCN là nhiệm vụ trung tâm".</p>
+                    </div>
+                    <div class="bg-yellow-50 p-4 rounded-lg border border-yellow-200 fly-item" style="--delay: 0.5s">
+                        <h4 class="font-bold text-red-800">Phương hướng</h4>
+                        <p class="text-sm">"Ưu tiên phát triển công nghiệp nặng một cách hợp lý, đồng thời phát triển nông nghiệp và công nghiệp nhẹ".</p>
+                    </div>
+                </div>
+                <div class="flex flex-col gap-4">
+                    <div class="rounded-xl overflow-hidden h-56 shadow-xl fly-item" style="--delay: 0.6s">
+                        <img src="https://mediabls.mediatech.vn/upload/image/202410/original/94e2ee6d622b9f4838ad9575201c6d1b.jpg" alt="Nhà máy Gang thép" class="w-full h-full object-cover">
+                    </div>
+                    <div class="speaker-notes p-4 rounded-lg italic text-xs text-gray-600 fly-item" style="--delay: 0.7s">
+                        <p><strong><i class="fas fa-comment"></i> </strong> "Năm 1960 là cột mốc lịch sử khi Đảng lần đầu tiên vạch ra đường lối CNH toàn diện. Các khu công nghiệp quy mô như Gang thép Thái Nguyên, Cơ khí Hà Nội đã ra đời trong thời gian này..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Giai đoạn 3 -->
+    <div class="slide bg-orange-50 items-center justify-center p-8" id="slide5">
+        <div class="content-card w-full max-w-5xl p-10 border-l-8 border-orange-500">
+            <span class="stage-badge mb-4 bg-orange-600 fly-item" style="--delay: 0.1s">Giai đoạn 3</span>
+            <h2 class="text-3xl font-bold text-orange-900 mb-6 fly-item" style="--delay: 0.2s">1975 - 1985: BÀI HỌC TỪ SỰ NÓNG VỘI</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="bg-white p-4 rounded shadow-sm fly-item" style="--delay: 0.3s">
+                        <h4 class="font-bold text-orange-700">Đại hội IV (1976)</h4>
+                        <p class="text-sm">Tiếp tục đẩy mạnh công nghiệp nặng quy mô lớn trên cả nước.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded shadow-sm fly-item" style="--delay: 0.4s">
+                        <h4 class="font-bold text-green-700">Đại hội V (1982)</h4>
+                        <p class="text-sm">Điều chỉnh bước đầu → Coi <strong>nông nghiệp là mặt trận hàng đầu</strong>.</p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded border border-red-200 fly-item" style="--delay: 0.5s">
+                        <h4 class="font-bold text-red-700"><i class="fas fa-exclamation-triangle mr-2"></i> Hạn chế</h4>
+                        <p class="text-sm">Nóng vội, duy ý chí; cơ chế kế hoạch hóa tập trung, bao cấp kìm hãm phát triển.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="rounded h-55 mb-4 overflow-hidden grayscale contrast-125 fly-item" style="--delay: 0.6s">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyjKfZNxN-imjUxrnTXaZH2wMXEyhxPFpszw&s" alt="Bao cấp Việt Nam" class="w-full h-full object-cover">
+                    </div>
+                    <div class="speaker-notes p-4 rounded-lg italic text-xs text-gray-600 fly-item" style="--delay: 0.7s">
+                        <p><strong><i class="fas fa-comment"></i></strong> "Sau giải phóng, chúng ta đã chủ quan khi bê nguyên mô hình công nghiệp nặng khổng lồ áp dụng cho cả nước... dù Đại hội V đã cố gắng điều chỉnh nhưng do cơ chế bao cấp, đất nước đã rơi vào khủng hoảng..."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Giai đoạn 4 -->
+    <div class="slide bg-green-50 items-center justify-center p-8" id="slide6">
+        <div class="content-card w-full max-w-5xl p-10 bg-white">
+            <span class="stage-badge mb-4 bg-green-700 fly-item" style="--delay: 0.1s">Giai đoạn 4</span>
+            <h2 class="text-3xl font-bold text-green-900 mb-6 fly-item" style="--delay: 0.2s">1986 - 1996: BƯỚC NGOẶT ĐỔI MỚI</h2>
+            <div class="grid grid-cols-12 gap-6">
+                <div class="col-span-7 space-y-4">
+                    <div class="bg-green-100 p-4 rounded-lg border-l-4 border-green-700 fly-item" style="--delay: 0.3s">
+                        <h4 class="font-bold text-green-900">Đại hội VI (1986)</h4>
+                        <p class="text-sm">Phê phán bệnh "duy ý chí". Đình hoãn dự án công nghiệp nặng kém hiệu quả.</p>
+                    </div>
+                    <div class="p-4 bg-yellow-50 rounded-lg border border-yellow-200 fly-item" style="--delay: 0.4s">
+                        <h4 class="font-bold text-yellow-800 mb-2">3 Chương trình kinh tế lớn:</h4>
+                        <div class="flex justify-between text-xs font-bold text-center">
+                            <div class="bg-white p-2 rounded shadow w-28">LƯƠNG THỰC<br>THỰC PHẨM</div>
+                            <div class="bg-white p-2 rounded shadow w-28">HÀNG<br>TIÊU DÙNG</div>
+                            <div class="bg-white p-2 rounded shadow w-28">HÀNG<br>XUẤT KHẨU</div>
+                        </div>
+                    </div>
+                    <p class="text-sm font-semibold bg-gray-100 p-2 rounded fly-item" style="--delay: 0.5s">Hội nghị TW 7 Khóa VII (1994): Lần đầu đưa ra khái niệm "Công nghiệp hóa, Hiện đại hóa" (CNH, HĐH).</p>
+                </div>
+                <div class="col-span-5 flex flex-col">
+                    <div class="rounded h-55 mb-4 overflow-hidden border-4 border-green-100 shadow-lg fly-item" style="--delay: 0.6s">
+                        <img src="https://images.hcmcpv.org.vn//Uploads/Image/310120221547376E/anh%2033.jpg" alt="Đổi mới Việt Nam" class="w-full h-full object-cover">
+                    </div>
+                    <div class="speaker-notes p-3 rounded-lg italic text-xs text-gray-600 fly-item" style="--delay: 0.7s">
+                        <p><strong><i class="fas fa-comment"></i></strong> "Đại hội VI năm 1986 là cú 'quay xe' cứu vãn nền kinh tế... Đặc biệt, năm 1994, chữ 'Hiện đại hóa' chính thức được gắn liền với 'Công nghiệp hóa', đánh dấu bước chuyển mình lớn về tư duy."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 7: Giai đoạn 5 -->
+    <div class="slide bg-indigo-50 items-center justify-center p-8" id="slide7">
+        <div class="content-card w-full max-w-5xl p-10 bg-white shadow-2xl">
+            <span class="stage-badge mb-4 bg-indigo-700 fly-item" style="--delay: 0.1s">Giai đoạn 5</span>
+            <h2 class="text-3xl font-bold text-indigo-900 mb-6 fly-item" style="--delay: 0.2s">1996 - 2020: ĐẨY MẠNH CNH, HĐH & HỘI NHẬP</h2>
+            <div class="grid grid-cols-2 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-4 p-3 bg-indigo-50 rounded fly-item" style="--delay: 0.3s">
+                        <div class="text-2xl text-indigo-700 w-12 text-center font-bold">VIII</div>
+                        <p class="text-sm">Đất nước thoát khỏi khủng hoảng, chính thức đẩy mạnh CNH, HĐH.</p>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-indigo-50 rounded fly-item" style="--delay: 0.4s">
+                        <div class="text-2xl text-indigo-700 w-12 text-center font-bold">IX,X</div>
+                        <p class="text-sm">Gắn với <strong>nền kinh tế tri thức</strong> và kinh tế thị trường định hướng XHCN.</p>
+                    </div>
+                    <div class="flex items-center gap-4 p-3 bg-indigo-50 rounded fly-item" style="--delay: 0.5s">
+                        <div class="text-2xl text-indigo-700 w-12 text-center font-bold">XI,XII</div>
+                        <p class="text-sm">Đổi mới mô hình tăng trưởng (từ chiều rộng sang chiều sâu).</p>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="rounded h-55 mb-4 overflow-hidden border-4 border-white shadow-lg fly-item" style="--delay: 0.6s">
+                        <img src="https://bcp.cdnchinhphu.vn/zoom/320_200/Uploaded/nguyenvanhuan/2013_08_25/42-cong-nghiep.jpg" alt="Hội nhập quốc tế" class="w-full h-full object-cover">
+                    </div>
+                    <div class="speaker-notes p-3 rounded-lg italic text-xs text-gray-600 fly-item" style="--delay: 0.7s">
+                        <p><strong><i class="fas fa-comment"></i></strong> "Giai đoạn này chứng kiến sự hội nhập mạnh mẽ... Đảng định hướng CNH phải dựa vào kinh tế tri thức và công nghệ, thay đổi từ số lượng sang chất lượng."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: Giai đoạn 6 -->
+    <div class="slide bg-cyan-900 items-center justify-center p-8 text-white" id="slide8">
+        <div class="content-card w-full max-w-5xl p-10 bg-slate-900 border border-cyan-500 shadow-[0_0_50px_rgba(6,182,212,0.3)]">
+            <span class="stage-badge mb-4 bg-cyan-500 fly-item" style="--delay: 0.1s">Giai đoạn 6</span>
+            <h2 class="text-3xl font-bold text-cyan-400 mb-6 fly-item" style="--delay: 0.2s">2021 - NAY: BỨT PHÁ TRONG KỶ NGUYÊN SỐ</h2>
+            <div class="grid grid-cols-2 gap-10">
+                <div class="space-y-6">
+                    <p class="text-sm leading-relaxed fly-item" style="--delay: 0.3s"><strong>Đại hội XIII & Nghị quyết 29:</strong> Dựa trên nền tảng Khoa học - Công nghệ - Đổi mới sáng tạo.</p>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-3 bg-slate-800 border border-cyan-800 rounded text-center fly-item" style="--delay: 0.4s">
+                            <i class="fas fa-robot text-cyan-400 text-xl mb-2"></i>
+                            <p class="text-xs">Chuyển đổi số quốc gia</p>
+                        </div>
+                        <div class="p-3 bg-slate-800 border border-cyan-800 rounded text-center fly-item" style="--delay: 0.5s">
+                            <i class="fas fa-leaf text-green-400 text-xl mb-2"></i>
+                            <p class="text-xs">Kinh tế xanh, tuần hoàn</p>
+                        </div>
+                    </div>
+                    <div class="bg-cyan-950 p-4 rounded border-l-4 border-cyan-400 fly-item" style="--delay: 0.6s">
+                        <h4 class="font-bold text-cyan-400 mb-1">Mục tiêu khát vọng</h4>
+                        <p class="text-xs"><strong>2030:</strong> Nước công nghiệp hiện đại, thu nhập trung bình cao.</p>
+                        <p class="text-xs"><strong>2045:</strong> Nước phát triển, thu nhập cao.</p>
+                    </div>
+                </div>
+                <div class="flex flex-col">
+                    <div class="rounded h-56 mb-4 overflow-hidden border-2 border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.5)] fly-item" style="--delay: 0.7s">
+                        <img src="https://i2-vnexpress.vnecdn.net/2025/03/18/settop-1742261748-1742261763-5170-1742261837.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=jQGhW2VC8ORd7duDJ85zAQ" alt="Kỷ nguyên số" class="w-full h-full object-cover">
+                    </div>
+                    <div class="speaker-notes p-3 rounded-lg italic text-xs text-gray-800 fly-item" style="--delay: 0.8s">
+                        <p><strong><i class="fas fa-comment"></i></strong> "Ngày nay, trong kỷ nguyên 4.0, đường lối CNH của Đảng nhắm thẳng vào chuyển đổi số, trí tuệ nhân tạo và kinh tế xanh... Việt Nam sẽ vươn mình trở thành một quốc gia phát triển vào năm 2045."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Tổng kết -->
+    <div class="slide gradient-bg items-center justify-center p-8" id="slide9">
+        <div class="content-card w-full max-w-4xl p-12 text-center relative overflow-hidden">
+            <h2 class="text-4xl font-bold text-blue-900 mb-8 uppercase fly-item" style="--delay: 0.1s">TỔNG KẾT & RÚT RA BÀI HỌC</h2>
+            
+            <div class="grid grid-cols-2 gap-8 text-left mb-8">
+                <div class="p-6 bg-red-50 rounded-xl fly-item" style="--delay: 0.2s">
+                    <h3 class="font-bold text-red-800 mb-4 border-b border-red-200 pb-2">Sự chuyển biến tư duy</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><i class="fas fa-arrow-right text-red-600 mr-2"></i> Khép kín → Hội nhập</li>
+                        <li><i class="fas fa-arrow-right text-red-600 mr-2"></i> Bao cấp → Thị trường</li>
+                        <li><i class="fas fa-arrow-right text-red-600 mr-2"></i> CN Nặng → Hiện đại hóa & Bền vững</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-blue-50 rounded-xl fly-item" style="--delay: 0.3s">
+                    <h3 class="font-bold text-blue-800 mb-4 border-b border-blue-200 pb-2">Bài học kinh nghiệm</h3>
+                    <ul class="text-sm space-y-2">
+                        <li><i class="fas fa-lightbulb text-yellow-600 mr-2"></i> Tôn trọng quy luật khách quan</li>
+                        <li><i class="fas fa-rocket text-blue-600 mr-2"></i> KHCN làm động lực chính</li>
+                        <li><i class="fas fa-heart text-red-600 mr-2"></i> Lợi ích nhân dân là trên hết</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="speaker-notes p-4 rounded-lg italic text-sm text-gray-600 text-left fly-item" style="--delay: 0.4s">
+                <p><strong><i class="fas fa-comment"></i></strong> "Tóm lại, đường lối CNH của Đảng là một quá trình không ngừng tự hoàn thiện... Bài thuyết trình của Nhóm 1 đến đây là kết thúc, xin cảm ơn thầy cô và các bạn đã lắng nghe!"</p>
+            </div>
+            
+            <div class="mt-8 text-red-700 font-bold animate-pulse text-xl fly-item" style="--delay: 0.5s">XIN CẢM ƠN!</div>
+        </div>
+    </div>
+
+    <!-- Điều hướng -->
+    <div class="fixed bottom-8 left-1/2 -translate-x-1/2 flex items-center gap-6 bg-white/80 backdrop-blur p-3 rounded-full shadow-lg z-50">
+        <button onclick="changeSlide(-1)" class="nav-btn text-blue-900 hover:text-red-700 px-4 py-2 font-bold rounded-full"><i class="fas fa-chevron-left mr-2"></i> TRƯỚC</button>
+        <span id="slideIndicator" class="text-gray-500 font-medium px-4 py-2 bg-gray-100 rounded-full">1 / 9</span>
+        <button onclick="changeSlide(1)" class="nav-btn text-blue-900 hover:text-red-700 px-4 py-2 font-bold rounded-full">TIẾP <i class="fas fa-chevron-right ml-2"></i></button>
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 9;
+
+        function updateSlideDisplay() {
+            // Chuyển cảnh mềm mại giữa các slide
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            
+            // Hiện slide mới (Trigger animation bay vào)
+            document.getElementById(`slide${currentSlide}`).classList.add('active');
+            
+            // Cập nhật số trang
+            document.getElementById('slideIndicator').innerText = `${currentSlide} / ${totalSlides}`;
+        }
+
+        function changeSlide(direction) {
+            currentSlide += direction;
+            if (currentSlide > totalSlides) currentSlide = 1;
+            if (currentSlide < 1) currentSlide = totalSlides;
+            updateSlideDisplay();
+        }
+
+        // Hỗ trợ phím mũi tên
+        document.addEventListener('keydown', (e) => {
+            if (e.key === "ArrowRight" || e.key === " ") changeSlide(1);
+            if (e.key === "ArrowLeft") changeSlide(-1);
+        });
+
+        // Kích hoạt animation khi load lần đầu
+        window.onload = function() {
+            setTimeout(() => {
+                updateSlideDisplay();
+            }, 100);
+        }
+    </script>
+</body>
+</html>
