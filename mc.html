@@ -116,13 +116,14 @@
         .inv-item .tooltip { position: absolute; bottom: -30px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border: 1px solid #aaa; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; pointer-events: none; display: none; z-index: 100; text-shadow: 1px 1px 0 #000; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
         .inv-item:hover .tooltip { display: block; }
         
-        /* Nút Tắt Túi Đồ cho Mobile */
+        /* ❌ NÚT TẮT TÚI ĐỒ CHUẨN XÁC CHO MOBILE ❌ */
         #btn-close-inv {
-            position: absolute; top: 10px; right: 10px; background: #ff3333; color: white;
-            width: 30px; height: 30px; border-radius: 5px; text-align: center; line-height: 30px;
-            font-weight: bold; cursor: pointer; border: 2px solid #aa0000; z-index: 60;
+            position: absolute; top: -15px; right: -15px; background: #ff3333; color: white;
+            width: 45px; height: 45px; border-radius: 50%; text-align: center; line-height: 40px;
+            font-size: 24px; font-weight: bold; cursor: pointer; border: 3px solid #aa0000; z-index: 60;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
         }
-        #btn-close-inv:active { background: #cc0000; }
+        #btn-close-inv:active { background: #cc0000; transform: scale(0.9); }
         
         /* 🏆 THÔNG BÁO THÀNH TỰU */
         #achievement-toast {
@@ -137,7 +138,7 @@
         .toast-title { color: #ffff00; font-weight: bold; font-size: 14px; margin-bottom: 3px; text-shadow: 1px 1px 0px #000; }
         .toast-desc { font-size: 16px; font-weight: bold; text-shadow: 1px 1px 0px #000; }
 
-        /* 📱 ĐIỀU KHIỂN MOBILE (TOUCH) */
+        /* 📱 ĐIỀU KHIỂN MOBILE (TOUCH) ĐƯỢC THIẾT KẾ LẠI */
         #mobile-ui {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 10; display: none;
@@ -152,11 +153,15 @@
         }
         .mob-btn:active { background: rgba(255,255,255,0.5); transform: scale(0.9); }
 
+        /* Joystick D-pad (Grid) */
+        .d-pad { position: absolute; bottom: 20px; left: 20px; width: 150px; height: 150px; pointer-events: none; }
+        .action-pad { position: absolute; bottom: 20px; right: 20px; width: 150px; height: 150px; pointer-events: none; }
+
         /* 📱 RESPONSIVE TỐI ƯU GIAO DIỆN MOBILE 📱 */
         @media (max-width: 768px) {
-            .mc-title { font-size: 38px !important; text-shadow: 2px 2px 0 #000, 0px 2px 0 #000, 2px 0px 0 #000, -1px -1px 0 #fff !important; }
+            .mc-title { font-size: 40px !important; text-shadow: 2px 2px 0 #000, 0px 2px 0 #000, 2px 0px 0 #000, -1px -1px 0 #fff !important; }
             .mc-subtitle { font-size: 12px !important; letter-spacing: 2px !important; }
-            .mc-splash { right: -20px !important; font-size: 16px !important; }
+            .mc-splash { right: -10px !important; font-size: 14px !important; bottom: -10px !important; }
             .mc-logo-container { margin-bottom: 20px !important; }
             
             .mc-board { width: 90vw !important; padding: 15px !important; box-sizing: border-box; }
@@ -164,20 +169,39 @@
             .mc-input { width: 80vw !important; max-width: 280px !important; box-sizing: border-box; }
             .mc-slider-container { width: 80vw !important; max-width: 280px !important; }
             
-            .settings-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+            .settings-grid { grid-template-columns: 1fr !important; gap: 10px !important; margin-bottom: 10px !important; }
             
             /* Tối ưu kích cỡ túi đồ */
             #inventory { width: 95vw !important; padding: 15px !important; box-sizing: border-box; max-height: 90vh !important; }
-            #inv-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 8px !important; }
+            #inv-grid { grid-template-columns: repeat(6, 1fr) !important; gap: 6px !important; }
             
             .slot { width: 38px !important; height: 38px !important; font-size: 18px !important; }
             .slot-img { width: 24px !important; height: 24px !important; }
-            #hotbar { padding: 3px !important; gap: 3px !important; }
+            #hotbar { padding: 3px !important; gap: 3px !important; bottom: 5px !important; }
+            #hud { bottom: 65px !important; transform: translateX(-50%) scale(0.8) !important; }
             
             .character-preview { display: none !important; } /* Ẩn nhân vật trên điện thoại cho gọn */
             
-            #mobile-ui .mob-btn { width: 45px !important; height: 45px !important; font-size: 14px !important; }
-            #btn-jump { width: 45px !important; height: 45px !important; }
+            .mob-btn { width: 45px !important; height: 45px !important; font-size: 14px !important; }
+            .d-pad, .action-pad { bottom: 10px !important; width: 135px !important; height: 135px !important; }
+            .d-pad { left: 10px !important; } .action-pad { right: 10px !important; }
+            
+            /* Sắp xếp lại D-Pad nhỏ gọn */
+            #btn-up { top: 0 !important; left: 45px !important; }
+            #btn-down { bottom: 0 !important; left: 45px !important; }
+            #btn-left { top: 45px !important; left: 0 !important; }
+            #btn-right { top: 45px !important; right: 0 !important; }
+            #btn-fly { top: 45px !important; left: 45px !important; width: 45px !important; height: 45px !important; border-radius: 50% !important; }
+            
+            /* Sắp xếp lại Action Pad hình thoi */
+            #btn-inv { top: 0 !important; left: 45px !important; }
+            #btn-break { top: 45px !important; left: 0 !important; }
+            #btn-place { top: 45px !important; right: 0 !important; }
+            #btn-jump { bottom: 0 !important; left: 45px !important; width: 45px !important; height: 45px !important; border-radius: 50% !important; }
+            
+            /* Thu nhỏ menu chữ */
+            .mc-label { font-size: 20px !important; margin-bottom: 10px !important; }
+            #pause-menu .mc-label { font-size: 26px !important; }
         }
     </style>
 </head>
@@ -185,7 +209,7 @@
 
     <div id="start-overlay">
         <div class="start-text">🐾 CHẠM ĐỂ CHƠI 🐾</div>
-        <p style="color:#aaa; margin-top:10px;">(Nhấp vào đây để tải Engine & Audio nha!)</p>
+        <p style="color:#aaa; margin-top:10px;">(Nhấp vào đây để tải Game nha!)</p>
     </div>
 
     <div id="loading-overlay" style="display:none;">...FOXCRAFT...</div>
@@ -212,7 +236,7 @@
         <div id="btn-mobile-pause" class="mob-btn" style="top: 10px; right: 10px; width: 40px; height: 40px; font-size: 20px; border-radius: 10px; background: rgba(0,0,0,0.5);">⏸</div>
         
         <!-- Joystick D-pad -->
-        <div style="position: absolute; bottom: 20px; left: 20px; width: 150px; height: 150px;">
+        <div class="d-pad">
             <div id="btn-up" class="mob-btn" style="top: 0; left: 50px;">W</div>
             <div id="btn-down" class="mob-btn" style="bottom: 0; left: 50px;">S</div>
             <div id="btn-left" class="mob-btn" style="top: 50px; left: 0;">A</div>
@@ -220,12 +244,12 @@
             <div id="btn-fly" class="mob-btn" style="top: 50px; left: 50px; width:46px; height:46px; font-size: 12px; background: rgba(0,255,255,0.2);">Fly</div>
         </div>
 
-        <!-- Action Pad -->
-        <div style="position: absolute; bottom: 20px; right: 20px; width: 150px; height: 150px;">
-            <div id="btn-place" class="mob-btn" style="top: 0; left: 50px; background: rgba(0,255,0,0.3);">Đặt</div>
-            <div id="btn-jump" class="mob-btn" style="bottom: 0; left: 50px; width: 50px; height: 50px; border-radius: 10px;">Nhảy</div>
+        <!-- Action Pad (Thiết kế lại hình thoi) -->
+        <div class="action-pad">
+            <div id="btn-inv" class="mob-btn" style="top: 0; left: 50px; background: rgba(100,100,100,0.6);">Túi</div>
             <div id="btn-break" class="mob-btn" style="top: 50px; left: 0; background: rgba(255,0,0,0.3);">Đập</div>
-            <div id="btn-inv" class="mob-btn" style="top: 50px; right: 0;">Túi</div>
+            <div id="btn-place" class="mob-btn" style="top: 50px; right: 0; background: rgba(0,255,0,0.3);">Đặt</div>
+            <div id="btn-jump" class="mob-btn" style="bottom: 0; left: 50px; width: 50px; height: 50px; border-radius: 10px; background: rgba(255,255,255,0.3);">Nhảy</div>
         </div>
     </div>
 
@@ -234,7 +258,7 @@
         <div id="btn-close-inv">X</div>
         <h2>🎒 Túi đồ của <span id="inv-player-name"> bạn </span> 🎀</h2>
         <div id="inv-grid"></div>
-        <p style="color: #aaa; font-size: 12px; margin-top: 15px;">Click để trang bị. Nhấn E hoặc nút X để thoát.</p>
+        <p style="color: #aaa; font-size: 12px; margin-top: 15px;">Chạm để trang bị. Bấm nút X màu đỏ để thoát.</p>
     </div>
 
     <!-- ========================================================= -->
@@ -258,7 +282,7 @@
             <img src="https://minotar.net/armor/body/Steve/200.png" alt="Steve" class="character-img">
             <input type="text" id="input-player-name" class="mc-input" style="width: 120px; margin-bottom:0; padding: 5px;" value="Goshujin-sama" placeholder="Tên của bạn">
         </div>
-        <div style="position: absolute; bottom: 10px; right: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">v8.0 Mobile Fixed</div>
+        <div style="position: absolute; bottom: 10px; right: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">v8.0 Mobile Optimized</div>
         <div style="position: absolute; bottom: 10px; left: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">Foxst AB</div>
     </div>
 
@@ -296,7 +320,7 @@
             <div class="mc-btn" id="btn-opt-vsync">V-Sync: ON</div>
             <div class="mc-btn" id="btn-opt-particles">Particles: All</div>
             <div class="mc-btn" id="btn-opt-shadows">Entity Shadows: ON</div>
-            <div class="mc-btn" id="btn-opt-fullscreen" style="grid-column: span 2; width: 90%; max-width: 415px;">Fullscreen: OFF</div>
+            <div class="mc-btn" id="btn-opt-fullscreen" style="grid-column: 1 / -1; width: 90%; max-width: 415px;">Fullscreen: OFF</div>
         </div>
         <div class="mc-btn" id="btn-video-back">Quay lại</div>
     </div>
@@ -378,10 +402,10 @@
         <div class="mc-label" style="font-size: 40px; margin-bottom: 20px;">Về Trò Chơi</div>
         <div class="mc-board" style="text-align: center; padding: 20px;">
             <h3 style="color: #00FFFF; text-shadow: 2px 2px 0 #000; margin-top: 0; font-size: 24px;">🦊 FOX CRAFT V8.0 🎀</h3>
-            <p>Game giải trí cực cao, đã tối ưu siêu cấp cho Mobile!</p>
-            <p>Nếu chơi không mượt... có thể do Cậu chủ bật bóng đổ (Shadows) trên máy yếu đó!</p>
+            <p>Game giải trí cực cao, dành cho máy yếu!</p>
+            <p>máy mạnh đừng chơi!</p>
             <p style="color: #FFD700; font-weight: bold; font-size: 18px; margin: 15px 0;">Nhà phát triển: FoxST</p>
-            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 10px 20px; font-size: 16px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 Lì Xì Tết 2026 - FoxAnime 🧧</div>
+            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 10px 20px; font-size: 16px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 DONATE ĐỂ CÓ SP TỐT HƠN !! 🧧</div>
         </div>
         <div class="mc-btn" id="btn-about-back">Quay lại</div>
     </div>
@@ -417,10 +441,9 @@
         let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false, canJump = false, flyMode = false;
         let prevTime = performance.now(), velocity = new THREE.Vector3(), outlineMesh; 
         
-        // CÁC BIẾN VECTOR TẠM THỜI (Tránh rác bộ nhớ)
         const tempRightVec = new THREE.Vector3(), tempForwardVec = new THREE.Vector3(); 
         
-        // 📱 BIẾN MOBILE TOUCH
+        // 📱 BIẾN MOBILE TOUCH (Tối ưu cho Điện thoại yếu)
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
         let lookTouchId = null; let lastLookX = 0, lastLookY = 0;
         
@@ -429,19 +452,17 @@
         let mixiSound, dogSound, bgmSound, achievSound;
         let dayTime = 0, sun, moon, cloudGroup, ambLight, dirLight;
 
-        // --- CẤU HÌNH HỆ THỐNG (SETTINGS VARIABLES) ---
-        // Video
-        let RENDER_DISTANCE = 100;
-        let gfxFancy = true, smoothLighting = true, vsyncEnabled = true, particleLevel = 2, entityShadows = true;
+        // --- CẤU HÌNH HỆ THỐNG (Tự động thích ứng Mobile) ---
+        // Video Settings
+        let RENDER_DISTANCE = isMobile ? 50 : 100; // Đẩy sương mù lại gần để đỡ lag trên Mobile
+        let gfxFancy = !isMobile, smoothLighting = !isMobile, vsyncEnabled = true, particleLevel = isMobile ? 0 : 2, entityShadows = !isMobile;
         let particles = []; 
         let playerHealth = 100;
         
         // Audio
         let volMaster = 1.0, volMusic = 0.5, volEffects = 1.0, volAmbient = 1.0, volMobs = 1.0, volBlocks = 1.0;
-        
         // Controls
         let mouseSensitivity = 1.0, invertMouse = false;
-
         // Accessibility
         let langVi = true, chatSize = 1, highContrast = false;
 
@@ -485,7 +506,7 @@
         }
 
         // ==============================================================================================
-        // 🟩 QUẢN LÝ BLOCK & VẬT PHẨM (Khôi phục chuẩn V7.4 + Limit Data) 🟩
+        // 🟩 QUẢN LÝ BLOCK & VẬT PHẨM
         // ==============================================================================================
         const BLOCKS = [
             { id: 1, name: 'Đất', color: '#5d4037' }, { id: 2, name: 'Cỏ', color: '#4caf50' }, { id: 3, name: 'Đá', color: '#757575' },
@@ -515,6 +536,15 @@
         // 🟦 QUẢN LÝ GIAO DIỆN UI/UX 🟦
         // ==============================================================================================
         
+        function updateMenuLabels() {
+            document.getElementById('label-render-dist').innerText = `Render Distance: ${RENDER_DISTANCE}`;
+            document.getElementById('slider-render-dist').value = RENDER_DISTANCE;
+            document.getElementById('btn-opt-graphics').innerText = `Graphics: ${gfxFancy ? 'Fancy' : 'Fast'}`;
+            document.getElementById('btn-opt-smooth').innerText = `Smooth Lighting: ${smoothLighting ? 'ON' : 'OFF'}`;
+            document.getElementById('btn-opt-particles').innerText = `Particles: ${["Minimal", "Decreased", "All"][particleLevel]}`;
+            document.getElementById('btn-opt-shadows').innerText = `Entity Shadows: ${entityShadows ? 'ON' : 'OFF'}`;
+        }
+
         function switchState(newState) {
             const panels = ['main-menu', 'play-menu', 'options-menu', 'video-settings-menu', 'audio-settings-menu', 'controls-settings-menu', 'accessibility-settings-menu', 'achievements-menu', 'about-menu', 'pause-menu', 'inventory'];
             panels.forEach(p => document.getElementById(p).style.display = 'none');
@@ -556,6 +586,8 @@
         }
 
         function setupUIEvents() {
+            updateMenuLabels(); // Áp dụng cấu hình tự động ngay khi vào UI
+
             document.getElementById('start-overlay').addEventListener('click', function() {
                 this.style.display = 'none';
                 document.getElementById('loading-overlay').style.display = 'flex';
@@ -610,7 +642,7 @@
                 RENDER_DISTANCE = parseInt(e.target.value);
                 document.getElementById('label-render-dist').innerText = `Render Distance: ${RENDER_DISTANCE}`;
                 if(camera) { camera.far = RENDER_DISTANCE + 20; camera.updateProjectionMatrix(); }
-                if(scene && scene.fog) scene.fog.far = RENDER_DISTANCE;
+                // Cập nhật khoảng cách Fog ở hàm animate
             });
             document.getElementById('btn-opt-smooth').onclick = (e) => {
                 smoothLighting = !smoothLighting; e.target.innerText = `Smooth Lighting: ${smoothLighting ? 'ON' : 'OFF'}`;
@@ -625,7 +657,6 @@
             };
             document.getElementById('btn-opt-shadows').onclick = (e) => {
                 entityShadows = !entityShadows; e.target.innerText = `Entity Shadows: ${entityShadows ? 'ON' : 'OFF'}`;
-                // Tắt mở bóng Entity
                 entities.forEach(ent => { ent.mesh.castShadow = entityShadows; ent.mesh.receiveShadow = entityShadows; });
             };
             document.getElementById('btn-opt-fullscreen').onclick = (e) => {
@@ -693,8 +724,11 @@
             document.getElementById('btn-resume').onclick = () => { switchState('PLAYING'); setTimeout(() => { if(gameState === 'PLAYING' && !isMobile) controls.lock(); }, 150); };
             document.getElementById('btn-quit').onclick = () => { clearWorld(); WORLD_SIZE = 64; generateWorld(); switchState('MENU'); };
             
-            // Đóng túi đồ
-            document.getElementById('btn-close-inv').onclick = (e) => { e.stopPropagation(); closeInventory(); };
+            // ❌ ĐÓNG TÚI ĐỒ TRÊN MOBILE (NÚT X) ❌
+            const closeInvBtn = document.getElementById('btn-close-inv');
+            // Dùng touchstart cho nhanh nhạy
+            closeInvBtn.addEventListener('touchstart', (e) => { e.preventDefault(); e.stopPropagation(); closeInventory(); }, {passive: false});
+            closeInvBtn.addEventListener('mousedown', (e) => { e.stopPropagation(); closeInventory(); });
 
             setupMobileControls();
         }
@@ -820,10 +854,13 @@
             
             ambLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambLight);
             dirLight = new THREE.DirectionalLight(0xffffff, 0.8); 
-            dirLight.castShadow = true; 
-            // ⚡ Tối ưu Shadow cho Mobile
-            dirLight.shadow.mapSize.width = isMobile ? 512 : 1024; 
-            dirLight.shadow.mapSize.height = isMobile ? 512 : 1024; 
+            
+            // ⚡ Nếu không phải Mobile và BẬT Shadows thì mới cho cast bóng để tối ưu FPS cho Điện thoại ⚡
+            if (!isMobile && entityShadows) {
+                dirLight.castShadow = true; 
+                dirLight.shadow.mapSize.width = 1024; 
+                dirLight.shadow.mapSize.height = 1024; 
+            }
             scene.add(dirLight);
 
             sun = new THREE.Mesh(new THREE.BoxGeometry(12, 12, 0.1), new THREE.MeshBasicMaterial({color: 0xffe600, transparent: true, opacity: 0.9})); scene.add(sun);
@@ -862,9 +899,13 @@
             WORLD_SIZE = 64; generateWorld(); controls.getObject().position.set(0, 15, 0); 
 
             renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
-            // ⚡ Tối ưu Pixel Ratio cho Mobile để tăng FPS
+            
+            // ⚡ Tối ưu Pixel Ratio cho Mobile để tăng vọt FPS
             renderer.setPixelRatio(isMobile ? 1 : window.devicePixelRatio); 
             renderer.setSize(window.innerWidth, window.innerHeight);
+            if (!isMobile && entityShadows) {
+                renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            }
             document.body.appendChild(renderer.domElement);
 
             window.addEventListener('resize', onWindowResize); document.addEventListener('keydown', onKeyDown); document.addEventListener('keyup', onKeyUp); document.addEventListener('mousedown', onMouseDown);
@@ -972,7 +1013,7 @@
             types.forEach(t => {
                 for(let i=0; i<t.count; i++) {
                     const mesh = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.l), new THREE.MeshLambertMaterial({ color: t.color })); 
-                    if (!isMobile) { mesh.castShadow = entityShadows; mesh.receiveShadow = entityShadows; }
+                    if (!isMobile && entityShadows) { mesh.castShadow = true; mesh.receiveShadow = true; }
                     mesh.position.set((Math.random() - 0.5) * (WORLD_SIZE/2), 15, (Math.random() - 0.5) * (WORLD_SIZE/2)); scene.add(mesh);
                     entities.push({ mesh: mesh, type: t.type, vy: 0, vx: 0, vz: 0, timer: Math.random() * 100, halfH: t.h / 2 });
                 }
@@ -1098,6 +1139,7 @@
             addTouch('btn-inv', () => toggleInventory());
             addTouch('btn-mobile-pause', () => switchState('PAUSED'));
 
+            // Chặn bắt sự kiện nổi trên màn hình chống lỗi cuộn trang
             document.addEventListener('touchstart', (e) => {
                 if (gameState !== 'PLAYING') return;
                 for (let i = 0; i < e.changedTouches.length; i++) {
@@ -1197,7 +1239,15 @@
             else if (elev > -0.1) { let t = (elev + 0.1) / 0.3; skyC.lerpColors(nightC, sunsetC, t); if(dirLight && sun) { dirLight.position.copy(sun.position); dirLight.intensity = Math.max(0, elev) * 0.8; } if(ambLight) ambLight.intensity = 0.2 + Math.max(0, elev) * 0.4; } 
             else { skyC.copy(nightC); if(dirLight && moon) { dirLight.position.copy(moon.position); dirLight.intensity = -elev * 0.2; } if(ambLight) ambLight.intensity = 0.2; }
             
-            scene.background = skyC; if(scene.fog) scene.fog.color = skyC;
+            scene.background = skyC; 
+            
+            // ⚡ Tối ưu Sương Mù (Tránh lỗi trắng xám map) ⚡
+            if(scene.fog) {
+                scene.fog.color = skyC;
+                // Đẩy sương mù bắt đầu từ 40% của render distance, tránh bị mù trắng ngay trước mặt
+                scene.fog.near = RENDER_DISTANCE * 0.4;
+                scene.fog.far = RENDER_DISTANCE;
+            }
 
             // 👁️ CULLING (Tối ưu vẽ)
             if (frames % 30 === 0) { 
