@@ -410,7 +410,8 @@
         // 🟪 CẤU HÌNH TOÀN CỤC & TỐI ƯU
         let WORLD_SIZE = 64; 
         const GRAVITY = 30.0; const JUMP_FORCE = 10.0; const SPEED = 60.0;
-        
+        const globalBoxGeo = new THREE.BoxGeometry(1, 1, 1);
+        const globalParticleGeo = new THREE.BoxGeometry(0.2, 0.2, 0.2);
         let camera, menuCamera, scene, renderer, controls, raycaster;
         let objects = [], worldMap = new Map(), entities = [], materials = {}, textures = {};
         
@@ -1003,7 +1004,7 @@
             if (worldMap.has(key)) return; 
             const bInfo = BLOCKS.find(b => b.id === id); if (bInfo && bInfo.isItem) return;
 
-            const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials[id]);
+            const mesh = new THREE.Mesh(globalBoxGeo, materials[id]);
             mesh.position.set(rx, ry, rz); mesh.matrixAutoUpdate = false; mesh.updateMatrix();
             
             // Nếu không phải Mobile và bật bóng đổ, mới cấp quyền tạo bóng
@@ -1033,7 +1034,7 @@
                     if (particleLevel > 0) {
                         const pC = particleLevel === 2 ? 8 : 3; let pM = materials[mesh.userData.id]; if (Array.isArray(pM)) pM = pM[2]; 
                         for(let i=0; i<pC; i++) {
-                            const pMesh = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), pM);
+                            const pMesh = new THREE.Mesh(globalParticleGeo, pM);
                             pMesh.position.copy(mesh.position); pMesh.position.x += (Math.random() - 0.5) * 0.5; pMesh.position.y += (Math.random() - 0.5) * 0.5; pMesh.position.z += (Math.random() - 0.5) * 0.5;
                             scene.add(pMesh); particles.push({ mesh: pMesh, vx: (Math.random() - 0.5) * 4, vy: Math.random() * 4 + 2, vz: (Math.random() - 0.5) * 4, life: 0.5 + Math.random() * 0.5 });
                         }
@@ -1181,7 +1182,7 @@
             for(let i = particles.length - 1; i >= 0; i--) {
                 let p = particles[i]; p.vy -= GRAVITY * delta; p.mesh.position.x += p.vx * delta; p.mesh.position.y += p.vy * delta; p.mesh.position.z += p.vz * delta;
                 p.life -= delta; p.mesh.scale.setScalar(Math.max(0, p.life)); 
-                if(p.life <= 0 || p.mesh.position.y < -65) { scene.remove(p.mesh); p.mesh.geometry.dispose(); particles.splice(i, 1); }
+                if(p.life <= 0 || p.mesh.position.y < -65) { scene.remove(p.mesh); particles.splice(i, 1); }
             }
 
             let activeCam = (gameState === 'MENU' || gameState === 'PLAY_MENU' || gameState.includes('_MENU')) && menuCamera ? menuCamera : camera;
