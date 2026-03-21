@@ -2,14 +2,16 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <!-- 🔥 Lệnh này siêu quan trọng để chống zoom và tràn màn hình trên Mobile 🔥 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fox Craft V8.0 - Vanilla Limits & Settings 🦊🎀</title>
+    <title>Fox Craft V8.0 - Mobile Optimized 🦊🎀</title>
 
     <!-- ========================================================================================== -->
     <!-- 🟨🟨🟨 PHẦN CSS: GIAO DIỆN VÀ STYLE 🟨🟨🟨 -->
     <!-- ========================================================================================== -->
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; background: #000; touch-action: none; }
+        /* Thêm touch-action: none và chặn bôi đen để chống lỗi vuốt trắng màn hình trên điện thoại */
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; background: #000; touch-action: none; }
         
         #crosshair {
             position: absolute; top: 50%; left: 50%; width: 20px; height: 20px;
@@ -47,7 +49,7 @@
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; cursor: pointer; }
-        .start-text { font-size: 30px; font-weight: bold; color: #ff69b4; text-shadow: 2px 2px 0px #fff; animation: pulse-start 1s infinite alternate; }
+        .start-text { font-size: 30px; font-weight: bold; color: #ff69b4; text-shadow: 2px 2px 0px #fff; animation: pulse-start 1s infinite alternate; text-align: center; padding: 20px;}
         @keyframes pulse-start { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
 
         /* Panels and UI */
@@ -114,6 +116,14 @@
         .inv-item .tooltip { position: absolute; bottom: -30px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border: 1px solid #aaa; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; pointer-events: none; display: none; z-index: 100; text-shadow: 1px 1px 0 #000; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
         .inv-item:hover .tooltip { display: block; }
         
+        /* Nút Tắt Túi Đồ cho Mobile */
+        #btn-close-inv {
+            position: absolute; top: 10px; right: 10px; background: #ff3333; color: white;
+            width: 30px; height: 30px; border-radius: 5px; text-align: center; line-height: 30px;
+            font-weight: bold; cursor: pointer; border: 2px solid #aa0000; z-index: 60;
+        }
+        #btn-close-inv:active { background: #cc0000; }
+        
         /* 🏆 THÔNG BÁO THÀNH TỰU */
         #achievement-toast {
             position: absolute; top: 20px; right: -400px; width: 320px; background: rgba(30, 30, 30, 0.9);
@@ -156,16 +166,16 @@
             
             .settings-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
             
-            #inventory { width: 95vw !important; padding: 10px !important; box-sizing: border-box; max-height: 90vh !important; }
-            #inv-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important; }
+            /* Tối ưu kích cỡ túi đồ */
+            #inventory { width: 95vw !important; padding: 15px !important; box-sizing: border-box; max-height: 90vh !important; }
+            #inv-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 8px !important; }
             
             .slot { width: 38px !important; height: 38px !important; font-size: 18px !important; }
             .slot-img { width: 24px !important; height: 24px !important; }
             #hotbar { padding: 3px !important; gap: 3px !important; }
             
-            .character-preview { display: none !important; } /* Ẩn nhân vật 3D trên điện thoại cho gọn */
+            .character-preview { display: none !important; } /* Ẩn nhân vật trên điện thoại cho gọn */
             
-            /* Thu gọn nút Mobile để không che khuất màn hình chơi */
             #mobile-ui .mob-btn { width: 45px !important; height: 45px !important; font-size: 14px !important; }
             #btn-jump { width: 45px !important; height: 45px !important; }
         }
@@ -174,8 +184,8 @@
 <body>
 
     <div id="start-overlay">
-        <div class="start-text">🐾 PLAY THE GAME 🐾</div>
-        <p style="color:#aaa; margin-top:10px;">(Nhấp để tải Engine & Audio)</p>
+        <div class="start-text">🐾 CHẠM ĐỂ CHƠI 🐾</div>
+        <p style="color:#aaa; margin-top:10px;">(Nhấp vào đây để tải Engine & Audio nha!)</p>
     </div>
 
     <div id="loading-overlay" style="display:none;">...FOXCRAFT...</div>
@@ -219,10 +229,12 @@
         </div>
     </div>
 
+    <!-- TÚI ĐỒ CÓ NÚT X ĐỂ ĐÓNG -->
     <div id="inventory">
+        <div id="btn-close-inv">X</div>
         <h2>🎒 Túi đồ của <span id="inv-player-name"> bạn </span> 🎀</h2>
         <div id="inv-grid"></div>
-        <p style="color: #aaa; font-size: 12px; margin-top: 15px;">Click để trang bị. Nhấn E hoặc ESC để thoát.</p>
+        <p style="color: #aaa; font-size: 12px; margin-top: 15px;">Click để trang bị. Nhấn E hoặc nút X để thoát.</p>
     </div>
 
     <!-- ========================================================= -->
@@ -234,7 +246,7 @@
         <div class="mc-logo-container">
             <div class="mc-title">FOXCRAFT</div>
             <div class="mc-subtitle">POCKET EDITION</div>
-            <div class="mc-splash">Vanilla Limits!</div>
+            <div class="mc-splash">Mobile Fix!</div>
         </div>
         <div class="mc-btn" id="btn-goto-play">Play</div>
         <div class="mc-btn" id="btn-goto-achievements">Achievements</div>
@@ -246,8 +258,8 @@
             <img src="https://minotar.net/armor/body/Steve/200.png" alt="Steve" class="character-img">
             <input type="text" id="input-player-name" class="mc-input" style="width: 120px; margin-bottom:0; padding: 5px;" value="Goshujin-sama" placeholder="Tên của bạn">
         </div>
-        <div style="position: absolute; bottom: 10px; right: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">v8.0 Settings & Limits</div>
-        <div style="position: absolute; bottom: 10px; left: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">Foxst AB (Just Kidding)</div>
+        <div style="position: absolute; bottom: 10px; right: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">v8.0 Mobile Fixed</div>
+        <div style="position: absolute; bottom: 10px; left: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">Foxst AB</div>
     </div>
 
     <!-- MENU: PLAY -->
@@ -262,43 +274,43 @@
     <!-- MENU: OPTIONS HUB -->
     <div id="options-menu" class="menu-panel">
         <div class="mc-label" style="font-size: 30px; margin-bottom: 30px; text-shadow: 3px 3px 0 #000;">Options</div>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
-            <div class="mc-btn" id="btn-goto-video" style="width: 200px;">Video Settings...</div>
-            <div class="mc-btn" id="btn-goto-audio" style="width: 200px;">Audio Settings...</div>
-            <div class="mc-btn" id="btn-goto-controls" style="width: 200px;">Controls...</div>
-            <div class="mc-btn" id="btn-goto-access" style="width: 200px;">Accessibility...</div>
+        <div class="settings-grid">
+            <div class="mc-btn" id="btn-goto-video">Video Settings...</div>
+            <div class="mc-btn" id="btn-goto-audio">Audio Settings...</div>
+            <div class="mc-btn" id="btn-goto-controls">Controls...</div>
+            <div class="mc-btn" id="btn-goto-access">Accessibility...</div>
         </div>
         <div class="mc-btn" id="btn-options-back">Xong</div>
     </div>
 
     <!-- SUB-MENU: VIDEO SETTINGS -->
     <div id="video-settings-menu" class="menu-panel">
-        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Video Settings</div>
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 20px;">Video Settings</div>
         <div class="settings-grid">
-            <div class="mc-btn" id="btn-opt-graphics" style="width: 200px;">Graphics: Fancy</div>
+            <div class="mc-btn" id="btn-opt-graphics">Graphics: Fancy</div>
             <div class="mc-slider-container">
                 <div class="mc-label" id="label-render-dist">Render Distance: 100</div>
                 <input type="range" id="slider-render-dist" class="mc-slider" min="30" max="250" value="100" step="10">
             </div>
-            <div class="mc-btn" id="btn-opt-smooth" style="width: 200px;">Smooth Lighting: ON</div>
-            <div class="mc-btn" id="btn-opt-vsync" style="width: 200px;">V-Sync: ON</div>
-            <div class="mc-btn" id="btn-opt-particles" style="width: 200px;">Particles: All</div>
-            <div class="mc-btn" id="btn-opt-shadows" style="width: 200px;">Entity Shadows: ON</div>
-            <div class="mc-btn" id="btn-opt-fullscreen" style="grid-column: span 2; width: 415px;">Fullscreen: OFF</div>
+            <div class="mc-btn" id="btn-opt-smooth">Smooth Lighting: ON</div>
+            <div class="mc-btn" id="btn-opt-vsync">V-Sync: ON</div>
+            <div class="mc-btn" id="btn-opt-particles">Particles: All</div>
+            <div class="mc-btn" id="btn-opt-shadows">Entity Shadows: ON</div>
+            <div class="mc-btn" id="btn-opt-fullscreen" style="grid-column: span 2; width: 90%; max-width: 415px;">Fullscreen: OFF</div>
         </div>
         <div class="mc-btn" id="btn-video-back">Quay lại</div>
     </div>
 
     <!-- SUB-MENU: AUDIO SETTINGS -->
     <div id="audio-settings-menu" class="menu-panel">
-        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Audio Settings</div>
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 20px;">Audio Settings</div>
         <div class="settings-grid">
             <div class="mc-slider-container">
-                <div class="mc-label" id="label-vol-master">Master Volume: 100%</div>
+                <div class="mc-label" id="label-vol-master">Master: 100%</div>
                 <input type="range" id="slider-vol-master" class="mc-slider" min="0" max="100" value="100">
             </div>
             <div class="mc-slider-container">
-                <div class="mc-label" id="label-vol-music">Music (BGM): 50%</div>
+                <div class="mc-label" id="label-vol-music">Music: 50%</div>
                 <input type="range" id="slider-vol-music" class="mc-slider" min="0" max="100" value="50">
             </div>
             <div class="mc-slider-container">
@@ -325,7 +337,7 @@
     <div id="controls-settings-menu" class="menu-panel">
         <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Controls</div>
         <div class="settings-grid" style="grid-template-columns: 1fr; gap: 20px;">
-            <div class="mc-slider-container" style="width: 300px;">
+            <div class="mc-slider-container" style="width: 300px; max-width: 80vw;">
                 <div class="mc-label" id="label-mouse-sens">Mouse Sensitivity: 100%</div>
                 <input type="range" id="slider-mouse-sens" class="mc-slider" min="10" max="200" value="100">
             </div>
@@ -364,12 +376,12 @@
     <!-- MENU: ABOUT -->
     <div id="about-menu" class="menu-panel">
         <div class="mc-label" style="font-size: 40px; margin-bottom: 20px;">Về Trò Chơi</div>
-        <div class="mc-board" style="text-align: center; padding: 30px;">
+        <div class="mc-board" style="text-align: center; padding: 20px;">
             <h3 style="color: #00FFFF; text-shadow: 2px 2px 0 #000; margin-top: 0; font-size: 24px;">🦊 FOX CRAFT V8.0 🎀</h3>
-            <p>game giải trí cực cao , nếu máy bạn ko mạnh thì hãy chơi nó.</p>
-            <p>game ko dành cho máy mạnh !</p>
+            <p>Game giải trí cực cao, đã tối ưu siêu cấp cho Mobile!</p>
+            <p>Nếu chơi không mượt... có thể do Cậu chủ bật bóng đổ (Shadows) trên máy yếu đó!</p>
             <p style="color: #FFD700; font-weight: bold; font-size: 18px; margin: 15px 0;">Nhà phát triển: FoxST</p>
-            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 15px 30px; font-size: 18px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 DONATE ĐỂ CÓ SP TỐT HƠN!! 🧧</div>
+            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 10px 20px; font-size: 16px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 Lì Xì Tết 2026 - FoxAnime 🧧</div>
         </div>
         <div class="mc-btn" id="btn-about-back">Quay lại</div>
     </div>
@@ -556,13 +568,6 @@
                 document.getElementById('inv-player-name').innerText = val;
             });
 
-            // MENU CHÍNH
-            document.getElementById('btn-goto-play').onclick = () => switchState('PLAY_MENU');
-            document.getElementById('btn-goto-achievements').onclick = () => { previousMenu = 'MENU'; switchState('ACHIEV_MENU'); };
-            document.getElementById('btn-goto-options').onclick = () => { previousMenu = 'MENU'; switchState('OPTIONS_MENU'); };
-            document.getElementById('btn-goto-about').onclick = () => { previousMenu = 'MENU'; switchState('ABOUT_MENU'); };
-            
-            // MENU PLAY
             document.getElementById('slider-world-size').addEventListener('input', (e) => {
                 const val = parseInt(e.target.value);
                 const sizeLabel = document.getElementById('label-world-size');
@@ -570,6 +575,14 @@
                 else if (val === 2) { sizeLabel.innerText = "Bình Thường (64x64)"; sizeLabel.style.color = "#FFFF00"; }
                 else { sizeLabel.innerText = "Khổng Lồ (128x128) - Nặng!"; sizeLabel.style.color = "#FF3333"; }
             });
+
+            // MENU CHÍNH
+            document.getElementById('btn-goto-play').onclick = () => switchState('PLAY_MENU');
+            document.getElementById('btn-goto-achievements').onclick = () => { previousMenu = 'MENU'; switchState('ACHIEV_MENU'); };
+            document.getElementById('btn-goto-options').onclick = () => { previousMenu = 'MENU'; switchState('OPTIONS_MENU'); };
+            document.getElementById('btn-goto-about').onclick = () => { previousMenu = 'MENU'; switchState('ABOUT_MENU'); };
+            
+            // MENU PLAY
             document.getElementById('btn-play-back').onclick = () => switchState('MENU');
             document.getElementById('btn-create-world').onclick = () => {
                 const sizeVal = parseInt(document.getElementById('slider-world-size').value);
@@ -612,6 +625,8 @@
             };
             document.getElementById('btn-opt-shadows').onclick = (e) => {
                 entityShadows = !entityShadows; e.target.innerText = `Entity Shadows: ${entityShadows ? 'ON' : 'OFF'}`;
+                // Tắt mở bóng Entity
+                entities.forEach(ent => { ent.mesh.castShadow = entityShadows; ent.mesh.receiveShadow = entityShadows; });
             };
             document.getElementById('btn-opt-fullscreen').onclick = (e) => {
                 if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); e.target.innerText = "Fullscreen: ON"; } 
@@ -678,6 +693,9 @@
             document.getElementById('btn-resume').onclick = () => { switchState('PLAYING'); setTimeout(() => { if(gameState === 'PLAYING' && !isMobile) controls.lock(); }, 150); };
             document.getElementById('btn-quit').onclick = () => { clearWorld(); WORLD_SIZE = 64; generateWorld(); switchState('MENU'); };
             
+            // Đóng túi đồ
+            document.getElementById('btn-close-inv').onclick = (e) => { e.stopPropagation(); closeInventory(); };
+
             setupMobileControls();
         }
 
@@ -801,7 +819,12 @@
             menuCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, RENDER_DISTANCE + 20); menuCamera.position.set(0, 4.5, 0); 
             
             ambLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambLight);
-            dirLight = new THREE.DirectionalLight(0xffffff, 0.8); scene.add(dirLight);
+            dirLight = new THREE.DirectionalLight(0xffffff, 0.8); 
+            dirLight.castShadow = true; 
+            // ⚡ Tối ưu Shadow cho Mobile
+            dirLight.shadow.mapSize.width = isMobile ? 512 : 1024; 
+            dirLight.shadow.mapSize.height = isMobile ? 512 : 1024; 
+            scene.add(dirLight);
 
             sun = new THREE.Mesh(new THREE.BoxGeometry(12, 12, 0.1), new THREE.MeshBasicMaterial({color: 0xffe600, transparent: true, opacity: 0.9})); scene.add(sun);
             moon = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 0.1), new THREE.MeshBasicMaterial({color: 0xdddddd})); scene.add(moon);
@@ -827,9 +850,9 @@
             
             document.addEventListener('click', (e) => { 
                 if (e.target.closest('.mc-btn') || e.target.closest('.menu-panel') || e.target.closest('#inventory')) return;
-                if (gameState === 'PLAYING' && !isInventoryOpen && !controls.isLocked) controls.lock(); 
+                if (gameState === 'PLAYING' && !isInventoryOpen && !controls.isLocked && !isMobile) controls.lock(); 
             });
-            controls.addEventListener('unlock', () => { if(gameState === 'PLAYING' && !isInventoryOpen) switchState('PAUSED'); });
+            controls.addEventListener('unlock', () => { if(gameState === 'PLAYING' && !isInventoryOpen && !isMobile) switchState('PAUSED'); });
             scene.add(controls.getObject());
 
             raycaster = new THREE.Raycaster(); raycaster.far = 7; 
@@ -839,7 +862,9 @@
             WORLD_SIZE = 64; generateWorld(); controls.getObject().position.set(0, 15, 0); 
 
             renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
-            renderer.setPixelRatio(window.devicePixelRatio); renderer.setSize(window.innerWidth, window.innerHeight);
+            // ⚡ Tối ưu Pixel Ratio cho Mobile để tăng FPS
+            renderer.setPixelRatio(isMobile ? 1 : window.devicePixelRatio); 
+            renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
 
             window.addEventListener('resize', onWindowResize); document.addEventListener('keydown', onKeyDown); document.addEventListener('keyup', onKeyUp); document.addEventListener('mousedown', onMouseDown);
@@ -947,6 +972,7 @@
             types.forEach(t => {
                 for(let i=0; i<t.count; i++) {
                     const mesh = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.l), new THREE.MeshLambertMaterial({ color: t.color })); 
+                    if (!isMobile) { mesh.castShadow = entityShadows; mesh.receiveShadow = entityShadows; }
                     mesh.position.set((Math.random() - 0.5) * (WORLD_SIZE/2), 15, (Math.random() - 0.5) * (WORLD_SIZE/2)); scene.add(mesh);
                     entities.push({ mesh: mesh, type: t.type, vy: 0, vx: 0, vz: 0, timer: Math.random() * 100, halfH: t.h / 2 });
                 }
@@ -979,7 +1005,10 @@
 
             const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials[id]);
             mesh.position.set(rx, ry, rz); mesh.matrixAutoUpdate = false; mesh.updateMatrix();
-            mesh.castShadow = true; mesh.receiveShadow = true; 
+            
+            // Nếu không phải Mobile và bật bóng đổ, mới cấp quyền tạo bóng
+            if (!isMobile && entityShadows) { mesh.castShadow = true; mesh.receiveShadow = true; }
+
             mesh.userData = { id: id, isSolid: !bInfo.noCollide, indestructible: !!bInfo.indestructible };
             scene.add(mesh); objects.push(mesh); worldMap.set(key, mesh); 
             
@@ -999,6 +1028,16 @@
                 if (gameState === 'PLAYING') {
                     if (mesh.userData.id === 4) triggerAchievement('wood'); 
                     if (mesh.userData.id === 17) triggerAchievement('diamond');
+                    
+                    // 🎇 Hạt (Particles) chỉ hiện nếu cài đặt > 0
+                    if (particleLevel > 0) {
+                        const pC = particleLevel === 2 ? 8 : 3; let pM = materials[mesh.userData.id]; if (Array.isArray(pM)) pM = pM[2]; 
+                        for(let i=0; i<pC; i++) {
+                            const pMesh = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.2, 0.2), pM);
+                            pMesh.position.copy(mesh.position); pMesh.position.x += (Math.random() - 0.5) * 0.5; pMesh.position.y += (Math.random() - 0.5) * 0.5; pMesh.position.z += (Math.random() - 0.5) * 0.5;
+                            scene.add(pMesh); particles.push({ mesh: pMesh, vx: (Math.random() - 0.5) * 4, vy: Math.random() * 4 + 2, vz: (Math.random() - 0.5) * 4, life: 0.5 + Math.random() * 0.5 });
+                        }
+                    }
                 }
                 scene.remove(mesh); const idx = objects.indexOf(mesh); if(idx > -1) objects.splice(idx, 1); worldMap.delete(key);
             }
@@ -1063,7 +1102,7 @@
                 if (gameState !== 'PLAYING') return;
                 for (let i = 0; i < e.changedTouches.length; i++) {
                     const t = e.changedTouches[i];
-                    if (!t.target.classList.contains('mob-btn') && !t.target.closest('#hotbar')) {
+                    if (!t.target.classList.contains('mob-btn') && !t.target.closest('#hotbar') && !t.target.closest('#inventory')) {
                         if (lookTouchId === null) { lookTouchId = t.identifier; lastLookX = t.clientX; lastLookY = t.clientY; }
                     }
                 }
@@ -1139,6 +1178,12 @@
             
             updateEntities(delta); 
 
+            for(let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i]; p.vy -= GRAVITY * delta; p.mesh.position.x += p.vx * delta; p.mesh.position.y += p.vy * delta; p.mesh.position.z += p.vz * delta;
+                p.life -= delta; p.mesh.scale.setScalar(Math.max(0, p.life)); 
+                if(p.life <= 0 || p.mesh.position.y < -65) { scene.remove(p.mesh); p.mesh.geometry.dispose(); particles.splice(i, 1); }
+            }
+
             let activeCam = (gameState === 'MENU' || gameState === 'PLAY_MENU' || gameState.includes('_MENU')) && menuCamera ? menuCamera : camera;
             
             dayTime += delta * (Math.PI / 600); if (dayTime > Math.PI * 2) dayTime -= Math.PI * 2;
@@ -1153,6 +1198,12 @@
             else { skyC.copy(nightC); if(dirLight && moon) { dirLight.position.copy(moon.position); dirLight.intensity = -elev * 0.2; } if(ambLight) ambLight.intensity = 0.2; }
             
             scene.background = skyC; if(scene.fog) scene.fog.color = skyC;
+
+            // 👁️ CULLING (Tối ưu vẽ)
+            if (frames % 30 === 0) { 
+                const cullDistSq = RENDER_DISTANCE * RENDER_DISTANCE;
+                for(let i=0; i<objects.length; i++) { const obj = objects[i]; obj.visible = ((obj.position.x - cx)**2 + (obj.position.z - cz)**2) < cullDistSq; }
+            }
 
             if (gameState === 'MENU' || gameState === 'PLAY_MENU' || gameState.includes('_MENU')) {
                 if (menuCamera) { 
