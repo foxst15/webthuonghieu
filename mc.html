@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Fox Craft V8.0 - Vanilla Limits & Settings 🦊🎀</title>
+
+    <!-- ========================================================================================== -->
+    <!-- 🟨🟨🟨 PHẦN CSS: GIAO DIỆN VÀ STYLE 🟨🟨🟨 -->
+    <!-- ========================================================================================== -->
+    <style>
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; background: #000; }
+        
+        #crosshair {
+            position: absolute; top: 50%; left: 50%; width: 20px; height: 20px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M10 0v20M0 10h20" stroke="white" stroke-width="2" style="filter:drop-shadow(1px 1px 1px black);"/></svg>');
+            transform: translate(-50%, -50%); pointer-events: none; z-index: 10; display: none;
+        }
+
+        #hud {
+            position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%);
+            display: none; gap: 20px; z-index: 5;
+        }
+        .bar { width: 200px; height: 15px; background: #333; border: 2px solid white; position: relative; }
+        .bar-fill { height: 100%; width: 100%; transition: width 0.2s; }
+        #health .bar-fill { background: #ff3333; } 
+        #hunger .bar-fill { background: #ff9900; } 
+        .icon { position: absolute; left: -25px; top: -5px; font-size: 20px; }
+
+        #hotbar {
+            position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.6); padding: 5px; border-radius: 5px;
+            display: none; gap: 5px; border: 2px solid #555; z-index: 15;
+        }
+        .slot {
+            width: 45px; height: 45px; background: rgba(255, 255, 255, 0.1);
+            border: 2px solid #888; display: flex; justify-content: center; align-items: center;
+            color: white; font-weight: bold; font-size: 24px; cursor: pointer; position: relative; transition: transform 0.1s;
+        }
+        .slot.active { border-color: #00FFFF; background: rgba(255, 255, 255, 0.4); transform: scale(1.15); box-shadow: 0 0 15px #00FFFF; z-index: 20; }
+        .slot-img { width: 32px; height: 32px; image-rendering: pixelated; pointer-events: none; object-fit: cover; position: absolute; }
+        .slot-num { position:absolute; top:2px; left:2px; font-size:10px; text-shadow:1px 1px 0 #000; color: white; font-family: monospace; }
+
+        #fps { position: absolute; top: 5px; left: 5px; color: #00FF00; font-weight: bold; text-shadow: 1px 1px 0 #000; z-index: 10; font-size: 18px; display: none; }
+        
+        #loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 200; display: flex; flex-direction: column; align-items:center; justify-content:center; color:#00FFFF; font-size:24px; animation: blink 1s infinite; }
+        @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
+        #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; cursor: pointer; }
+        .start-text { font-size: 30px; font-weight: bold; color: #ff69b4; text-shadow: 2px 2px 0px #fff; animation: pulse-start 1s infinite alternate; }
+        @keyframes pulse-start { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+
+        /* Panels and UI */
+        .menu-panel {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: none; flex-direction: column; background: rgba(0,0,0,0.4);
+            justify-content: center; align-items: center; z-index: 100;
+            backdrop-filter: blur(2px);
+        }
+        
+        body.high-contrast .menu-panel { background: rgba(0,0,0,0.9); backdrop-filter: none; }
+        body.high-contrast .mc-btn { background: #000; color: #fff; border-color: #fff; }
+        body.high-contrast .mc-label { color: #fff; text-shadow: none; }
+
+        #pause-menu { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+
+        .mc-logo-container { position: relative; margin-bottom: 40px; text-align: center; }
+        .mc-title { font-size: 60px; font-weight: 900; color: #a8a8a8; text-shadow: 4px 4px 0 #000, 0px 4px 0 #000, 4px 0px 0 #000, -2px -2px 0 #fff; font-family: 'Arial Black', Impact, sans-serif; letter-spacing: 2px; line-height: 1; }
+        .mc-subtitle { font-size: 18px; color: #fff; text-shadow: 2px 2px 0 #000; letter-spacing: 6px; font-weight: bold; margin-top: 5px; }
+        .mc-splash { position: absolute; right: -60px; bottom: -20px; color: #ffff00; font-size: 24px; font-weight: 900; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0 #3f3f00; transform: rotate(-20deg); animation: mc-splash-bounce 0.4s ease-in-out infinite alternate; white-space: nowrap; z-index: 10; }
+        @keyframes mc-splash-bounce { 0% { transform: rotate(-20deg) scale(0.95); } 100% { transform: rotate(-20deg) scale(1.15); } }
+        
+        .mc-btn {
+            background: #c6c6c6; border: 2px solid #111; border-top-color: #fefefe; border-left-color: #fefefe;
+            border-bottom-color: #555; border-right-color: #555; color: #333; font-weight: bold; font-size: 16px; 
+            padding: 10px 15px; cursor: pointer; width: 250px; text-align: center; user-select: none;
+            box-shadow: inset -2px -2px 0px rgba(0,0,0,0.25); margin-bottom: 10px; font-family: 'Courier New', Courier, monospace;
+        }
+        .mc-btn:active { border-top-color: #555; border-left-color: #555; border-bottom-color: #fefefe; border-right-color: #fefefe; background: #a6a6a6; box-shadow: inset 2px 2px 0px rgba(0,0,0,0.25); }
+        .mc-btn:hover { background: #d0d0d0; }
+        .mc-btn.half { width: 110px; margin-bottom: 0; }
+
+        .mc-input { background: rgba(0,0,0,0.6); color: white; border: 2px solid #555; border-top-color: #111; border-left-color: #111; padding: 10px; font-size: 16px; font-family: monospace; width: 270px; margin-bottom: 20px; outline: none; text-align: center; }
+        .mc-input:focus { border-color: #00FFFF; }
+        .mc-label { color: white; text-shadow: 2px 2px 0 #000; font-weight: bold; margin-bottom: 5px; font-size: 16px; text-align: center;}
+        
+        .mc-slider-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; width: 200px;}
+        .mc-slider { width: 100%; cursor: pointer; }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; align-items: center; justify-items: center;}
+
+        .character-preview { position: absolute; right: 10%; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; }
+        .character-name { background: rgba(0,0,0,0.5); color: white; padding: 2px 8px; margin-bottom: 5px; border-radius: 4px; font-family: sans-serif; font-size: 14px; font-weight: bold; }
+        .character-img { height: 200px; image-rendering: pixelated; filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.5)); margin-bottom: 10px;}
+
+        .mc-board { background: rgba(0,0,0,0.7); border: 4px solid #555; padding: 20px; width: 450px; max-height: 350px; overflow-y: auto; color: white; margin-bottom: 20px;}
+        .achiev-item { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; border: 2px solid #444; }
+        .achiev-icon { font-size: 30px; margin-right: 15px; }
+        .achiev-title { font-weight: bold; color: #FFD700; font-size: 18px; text-shadow: 1px 1px 0 #000;}
+        .achiev-desc { font-size: 14px; color: #ccc; }
+
+        /* TÚI ĐỒ */
+        #inventory {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 550px;
+            background: rgba(30, 30, 30, 0.95); border: 4px solid #555; border-radius: 10px;
+            padding: 20px; display: none; z-index: 50; flex-direction: column; align-items: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto;
+        }
+        #inventory::-webkit-scrollbar { width: 8px; } #inventory::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        #inventory h2 { color: white; margin-top: 0; text-shadow: 2px 2px 0 #000; }
+        #inv-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; width: 100%; justify-items: center; }
+        
+        .inv-item { width: 50px; height: 50px; background: rgba(255,255,255,0.1); border: 2px solid #777; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: background 0.2s, border-color 0.2s; position: relative; overflow: visible; font-size: 24px; color: white;}
+        .inv-item:hover { background: rgba(255,255,255,0.3); border-color: white; }
+        .inv-item .tooltip { position: absolute; bottom: -30px; background: rgba(0,0,0,0.8); color: white; padding: 4px 8px; border: 1px solid #aaa; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; pointer-events: none; display: none; z-index: 100; text-shadow: 1px 1px 0 #000; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .inv-item:hover .tooltip { display: block; }
+        
+        /* 🏆 THÔNG BÁO THÀNH TỰU */
+        #achievement-toast {
+            position: absolute; top: 20px; right: -400px; width: 320px; background: rgba(30, 30, 30, 0.9);
+            border: 3px solid #555; border-radius: 8px; padding: 10px 15px; display: flex; align-items: center;
+            color: white; z-index: 1000; transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 15px rgba(0,0,0,0.8); pointer-events: none;
+        }
+        #achievement-toast.show { right: 20px; } 
+        .toast-icon { font-size: 36px; margin-right: 15px; text-shadow: 2px 2px 0px #000; }
+        .toast-content { display: flex; flex-direction: column; }
+        .toast-title { color: #ffff00; font-weight: bold; font-size: 14px; margin-bottom: 3px; text-shadow: 1px 1px 0px #000; }
+        .toast-desc { font-size: 16px; font-weight: bold; text-shadow: 1px 1px 0px #000; }
+
+        /* 📱 ĐIỀU KHIỂN MOBILE (TOUCH) */
+        #mobile-ui {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 10; display: none;
+        }
+        .mob-btn {
+            position: absolute; pointer-events: auto; background: rgba(255,255,255,0.2);
+            border: 2px solid rgba(255,255,255,0.5); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            color: white; font-weight: bold; font-size: 16px; user-select: none;
+            width: 50px; height: 50px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+            text-shadow: 1px 1px 0 #000;
+        }
+        .mob-btn:active { background: rgba(255,255,255,0.5); transform: scale(0.9); }
+    </style>
+</head>
+<body>
+
+    <div id="start-overlay">
+        <div class="start-text">🐾 PLAY THE GAME 🐾</div>
+        <p style="color:#aaa; margin-top:10px;">(Nhấp để tải Engine & Audio)</p>
+    </div>
+
+    <div id="loading-overlay" style="display:none;">...FOXCRAFT...</div>
+
+    <div id="achievement-toast">
+        <div class="toast-icon" id="toast-icon">🏆</div>
+        <div class="toast-content">
+            <div class="toast-title">Achievement Get!</div>
+            <div class="toast-desc" id="toast-desc">Thành tựu mới</div>
+        </div>
+    </div>
+
+    <!-- UI GAME CỐT LÕI -->
+    <div id="crosshair"></div>
+    <div id="fps">FPS: 0</div>
+    <div id="hud">
+        <div id="health" class="bar"><span class="icon">❤️</span><div class="bar-fill" id="health-fill" style="width: 100%;"></div></div>
+        <div id="hunger" class="bar"><span class="icon">🍗</span><div class="bar-fill" id="hunger-fill" style="width: 90%;"></div></div>
+    </div>
+    <div id="hotbar"></div>
+    
+    <!-- 📱 NÚT ĐIỀU KHIỂN MOBILE HIỂN THỊ KHI CHƠI -->
+    <div id="mobile-ui">
+        <div id="btn-mobile-pause" class="mob-btn" style="top: 10px; right: 10px; width: 40px; height: 40px; font-size: 20px; border-radius: 10px; background: rgba(0,0,0,0.5);">⏸</div>
+        
+        <!-- Joystick D-pad -->
+        <div style="position: absolute; bottom: 20px; left: 20px; width: 150px; height: 150px;">
+            <div id="btn-up" class="mob-btn" style="top: 0; left: 50px;">W</div>
+            <div id="btn-down" class="mob-btn" style="bottom: 0; left: 50px;">S</div>
+            <div id="btn-left" class="mob-btn" style="top: 50px; left: 0;">A</div>
+            <div id="btn-right" class="mob-btn" style="top: 50px; right: 0;">D</div>
+            <div id="btn-fly" class="mob-btn" style="top: 50px; left: 50px; width:46px; height:46px; font-size: 12px; background: rgba(0,255,255,0.2);">Fly</div>
+        </div>
+
+        <!-- Action Pad -->
+        <div style="position: absolute; bottom: 20px; right: 20px; width: 150px; height: 150px;">
+            <div id="btn-place" class="mob-btn" style="top: 0; left: 50px; background: rgba(0,255,0,0.3);">Đặt</div>
+            <div id="btn-jump" class="mob-btn" style="bottom: 0; left: 50px; width: 50px; height: 50px; border-radius: 10px;">Nhảy</div>
+            <div id="btn-break" class="mob-btn" style="top: 50px; left: 0; background: rgba(255,0,0,0.3);">Đập</div>
+            <div id="btn-inv" class="mob-btn" style="top: 50px; right: 0;">Túi</div>
+        </div>
+    </div>
+
+    <div id="inventory">
+        <h2>🎒 Túi đồ của <span id="inv-player-name"></span> 🎀</h2>
+        <div id="inv-grid"></div>
+        <p style="color: #aaa; font-size: 12px; margin-top: 15px;">Click để trang bị. Nhấn E hoặc ESC để thoát.</p>
+    </div>
+
+    <!-- ========================================================= -->
+    <!-- CÁC MENU CHÍNH & PHỤ (HUB OPTIONS)                        -->
+    <!-- ========================================================= -->
+
+    <!-- MENU: MAIN -->
+    <div id="main-menu" class="menu-panel">
+        <div class="mc-logo-container">
+            <div class="mc-title">FOXCRAFT</div>
+            <div class="mc-subtitle">POCKET EDITION</div>
+            <div class="mc-splash">Vanilla Limits!</div>
+        </div>
+        <div class="mc-btn" id="btn-goto-play">Play</div>
+        <div class="mc-btn" id="btn-goto-achievements">Achievements</div>
+        <div class="mc-btn" id="btn-goto-options">Options</div>
+        <div class="mc-btn" id="btn-goto-about">About</div>
+
+        <div class="character-preview">
+            <div class="character-name" id="display-player-name">Goshujin-sama</div>
+            <img src="https://minotar.net/armor/body/Steve/200.png" alt="Steve" class="character-img">
+            <input type="text" id="input-player-name" class="mc-input" style="width: 120px; margin-bottom:0; padding: 5px;" value="Goshujin-sama" placeholder="Tên của bạn">
+        </div>
+        <div style="position: absolute; bottom: 10px; right: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">v8.0 Settings & Limits</div>
+        <div style="position: absolute; bottom: 10px; left: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">Foxst AB (Just Kidding)</div>
+    </div>
+
+    <!-- MENU: PLAY -->
+    <div id="play-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Tạo Thế Giới Mới</div>
+        <input type="range" id="slider-world-size" class="mc-slider" min="1" max="3" value="2" step="1">
+        <div class="mc-label" style="margin-bottom:20px;">Kích Cỡ Map: <span id="label-world-size" style="color: #ffff00;">Bình Thường (64x64)</span></div>
+        <div class="mc-btn" id="btn-create-world">Tạo & Chơi!</div>
+        <div class="mc-btn" id="btn-play-back">Quay lại</div>
+    </div>
+
+    <!-- MENU: OPTIONS HUB -->
+    <div id="options-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px; text-shadow: 3px 3px 0 #000;">Options</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+            <div class="mc-btn" id="btn-goto-video" style="width: 200px;">Video Settings...</div>
+            <div class="mc-btn" id="btn-goto-audio" style="width: 200px;">Audio Settings...</div>
+            <div class="mc-btn" id="btn-goto-controls" style="width: 200px;">Controls...</div>
+            <div class="mc-btn" id="btn-goto-access" style="width: 200px;">Accessibility...</div>
+        </div>
+        <div class="mc-btn" id="btn-options-back">Xong</div>
+    </div>
+
+    <!-- SUB-MENU: VIDEO SETTINGS -->
+    <div id="video-settings-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Video Settings</div>
+        <div class="settings-grid">
+            <div class="mc-btn" id="btn-opt-graphics" style="width: 200px;">Graphics: Fancy</div>
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-render-dist">Render Distance: 100</div>
+                <input type="range" id="slider-render-dist" class="mc-slider" min="30" max="250" value="100" step="10">
+            </div>
+            <div class="mc-btn" id="btn-opt-smooth" style="width: 200px;">Smooth Lighting: ON</div>
+            <div class="mc-btn" id="btn-opt-vsync" style="width: 200px;">V-Sync: ON</div>
+            <div class="mc-btn" id="btn-opt-particles" style="width: 200px;">Particles: All</div>
+            <div class="mc-btn" id="btn-opt-shadows" style="width: 200px;">Entity Shadows: ON</div>
+            <div class="mc-btn" id="btn-opt-fullscreen" style="grid-column: span 2; width: 415px;">Fullscreen: OFF</div>
+        </div>
+        <div class="mc-btn" id="btn-video-back">Quay lại</div>
+    </div>
+
+    <!-- SUB-MENU: AUDIO SETTINGS -->
+    <div id="audio-settings-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Audio Settings</div>
+        <div class="settings-grid">
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-vol-master">Master Volume: 100%</div>
+                <input type="range" id="slider-vol-master" class="mc-slider" min="0" max="100" value="100">
+            </div>
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-vol-music">Music (BGM): 50%</div>
+                <input type="range" id="slider-vol-music" class="mc-slider" min="0" max="100" value="50">
+            </div>
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-vol-effects">Effects: 100%</div>
+                <input type="range" id="slider-vol-effects" class="mc-slider" min="0" max="100" value="100">
+            </div>
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-vol-ambient">Environment: 100%</div>
+                <input type="range" id="slider-vol-ambient" class="mc-slider" min="0" max="100" value="100">
+            </div>
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-vol-mobs">Mob Voices: 100%</div>
+                <input type="range" id="slider-vol-mobs" class="mc-slider" min="0" max="100" value="100">
+            </div>
+            <div class="mc-slider-container">
+                <div class="mc-label" id="label-vol-blocks">Blocks: 100%</div>
+                <input type="range" id="slider-vol-blocks" class="mc-slider" min="0" max="100" value="100">
+            </div>
+        </div>
+        <div class="mc-btn" id="btn-audio-back">Quay lại</div>
+    </div>
+
+    <!-- SUB-MENU: CONTROLS -->
+    <div id="controls-settings-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Controls</div>
+        <div class="settings-grid" style="grid-template-columns: 1fr; gap: 20px;">
+            <div class="mc-slider-container" style="width: 300px;">
+                <div class="mc-label" id="label-mouse-sens">Mouse Sensitivity: 100%</div>
+                <input type="range" id="slider-mouse-sens" class="mc-slider" min="10" max="200" value="100">
+            </div>
+            <div class="mc-btn" id="btn-opt-invert">Invert Mouse: OFF</div>
+            <div class="mc-btn" id="btn-opt-keybinds" style="color: #888;">Keybinds... (Coming Soon)</div>
+        </div>
+        <div class="mc-btn" id="btn-controls-back">Quay lại</div>
+    </div>
+
+    <!-- SUB-MENU: ACCESSIBILITY -->
+    <div id="accessibility-settings-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Language & Accessibility</div>
+        <div class="settings-grid" style="grid-template-columns: 1fr; gap: 20px;">
+            <div class="mc-btn" id="btn-opt-lang">Language: Tiếng Việt</div>
+            <div class="mc-btn" id="btn-opt-chat">Chat Settings: Normal</div>
+            <div class="mc-btn" id="btn-opt-contrast">High Contrast: OFF</div>
+        </div>
+        <div class="mc-btn" id="btn-access-back">Quay lại</div>
+    </div>
+
+    <!-- MENU: ACHIEVEMENTS -->
+    <div id="achievements-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 30px; margin-bottom: 20px;">Thành Tựu</div>
+        <div class="mc-board">
+            <div class="achiev-item"><div class="achiev-icon">🌲</div><div><div class="achiev-title">Getting Wood</div><div class="achiev-desc">Đập một khối gỗ.</div></div></div>
+            <div class="achiev-item"><div class="achiev-icon">💎</div><div><div class="achiev-title">Time to Mine!</div><div class="achiev-desc">Đào được Kim Cương.</div></div></div>
+            <div class="achiev-item"><div class="achiev-icon">📞</div><div><div class="achiev-title">Alo Vũ hả em?</div><div class="achiev-desc">Gặp gỡ Tộc Trưởng Độ Mixi.</div></div></div>
+            <div class="achiev-item"><div class="achiev-icon">📞</div><div><div class="achiev-title">Alo bã mía cao bằng?</div><div class="achiev-desc">Đặt khối Meme Lỗi.</div></div></div>
+            <div class="achiev-item"><div class="achiev-icon">🐶</div><div><div class="achiev-title">What the dog doin?</div><div class="achiev-desc">Triệu hồi chó Doin huyền thoại.</div></div></div>
+            <div class="achiev-item"><div class="achiev-icon">⭐</div><div><div class="achiev-title">Chạm tới các vì sao</div><div class="achiev-desc">Xây đến giới hạn Y = +180.</div></div></div>
+            <div class="achiev-item"><div class="achiev-icon">🎀</div><div><div class="achiev-title">HELLO WORLD</div><div class="achiev-desc">Bắt đầu trò chơi lần đầu tiên.</div></div></div>
+        </div>
+        <div class="mc-btn" id="btn-achiev-back">Quay lại</div>
+    </div>
+
+    <!-- MENU: ABOUT -->
+    <div id="about-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 40px; margin-bottom: 20px;">Về Trò Chơi</div>
+        <div class="mc-board" style="text-align: center; padding: 30px;">
+            <h3 style="color: #00FFFF; text-shadow: 2px 2px 0 #000; margin-top: 0; font-size: 24px;">🦊 FOX CRAFT V8.0 🎀</h3>
+            <p>game giải trí ,máy của bạn có đủ chơi dc ko .</p>
+            <p>nếu ko chơi mượt đập mẹ nó máy đi!</p>
+            <p style="color: #FFD700; font-weight: bold; font-size: 18px; margin: 15px 0;">Nhà phát triển: FoxST</p>
+            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 15px 30px; font-size: 18px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 DONATE PLS!! 🧧</div>
+        </div>
+        <div class="mc-btn" id="btn-about-back">Quay lại</div>
+    </div>
+
+    <!-- MENU: PAUSE -->
+    <div id="pause-menu" class="menu-panel">
+        <div class="mc-label" style="font-size: 40px; margin-bottom: 30px;">Trò Chơi Tạm Dừng</div>
+        <div class="mc-btn" id="btn-resume">Quay Lại Trò Chơi</div>
+        <div class="mc-btn" id="btn-pause-options">Cài Đặt Options</div>
+        <div class="mc-btn" id="btn-quit" style="margin-top: 20px;">Lưu & Thoát Ra Menu</div>
+    </div>
+
+    <script type="importmap">
+        {
+            "imports": {
+                "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+                "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
+
+        // 🟪 CẤU HÌNH TOÀN CỤC & TỐI ƯU
+        let WORLD_SIZE = 64; 
+        const GRAVITY = 30.0; const JUMP_FORCE = 10.0; const SPEED = 60.0;
+        
+        let camera, menuCamera, scene, renderer, controls, raycaster;
+        let objects = [], worldMap = new Map(), entities = [], materials = {}, textures = {};
+        
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false, canJump = false, flyMode = false;
+        let prevTime = performance.now(), velocity = new THREE.Vector3(), outlineMesh; 
+        
+        // CÁC BIẾN VECTOR TẠM THỜI (Tránh rác bộ nhớ)
+        const tempRightVec = new THREE.Vector3(), tempForwardVec = new THREE.Vector3(); 
+        
+        // 📱 BIẾN MOBILE TOUCH
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
+        let lookTouchId = null; let lastLookX = 0, lastLookY = 0;
+        
+        let gameState = 'START', previousMenu = 'MENU', isInventoryOpen = false;
+        let frames = 0, lastFpsTime = performance.now(), lastRaycastTime = 0; 
+        let mixiSound, dogSound, bgmSound, achievSound;
+        let dayTime = 0, sun, moon, cloudGroup, ambLight, dirLight;
+
+        // --- CẤU HÌNH HỆ THỐNG (SETTINGS VARIABLES) ---
+        // Video
+        let RENDER_DISTANCE = 100;
+        let gfxFancy = true, smoothLighting = true, vsyncEnabled = true, particleLevel = 2, entityShadows = true;
+        let particles = []; 
+        let playerHealth = 100;
+        
+        // Audio
+        let volMaster = 1.0, volMusic = 0.5, volEffects = 1.0, volAmbient = 1.0, volMobs = 1.0, volBlocks = 1.0;
+        
+        // Controls
+        let mouseSensitivity = 1.0, invertMouse = false;
+
+        // Accessibility
+        let langVi = true, chatSize = 1, highContrast = false;
+
+        // --- HỆ THỐNG THÀNH TỰU ---
+        const ACHIEVEMENTS_DATA = {
+            'wood': { title: 'Getting Wood', icon: '🌲' },
+            'diamond': { title: 'Time to Mine!', icon: '💎' },
+            'eat': { title: 'Yummy!', icon: '🍎' },
+            'mixi': { title: 'Alo Vũ hả em?', icon: '📞' },
+            'bamia': { title: 'Alo bã mía cao bằng?', icon: '📞' },
+            'dog': { title: 'What the dog doin?', icon: '🐶' },
+            'play': { title: 'HELLO WORLD', icon: '🎀' },
+            'build_limit': { title: 'Chạm tới các vì sao', icon: '⭐' }
+        };
+        let unlockedAchievs = {}; let achievTimeout;
+
+        function triggerAchievement(id) {
+            if (unlockedAchievs[id] || !ACHIEVEMENTS_DATA[id]) return; 
+            unlockedAchievs[id] = true;
+            const data = ACHIEVEMENTS_DATA[id];
+            
+            document.getElementById('toast-icon').innerText = data.icon;
+            document.getElementById('toast-desc').innerText = data.title;
+            const toast = document.getElementById('achievement-toast');
+            
+            toast.classList.add('show');
+            if (achievSound) { 
+                achievSound.currentTime = 0; 
+                achievSound.volume = volMaster * volEffects; 
+                achievSound.play().catch(e=>console.warn(e)); 
+            }
+            
+            if(achievTimeout) clearTimeout(achievTimeout);
+            achievTimeout = setTimeout(() => { toast.classList.remove('show'); }, 4000); 
+        }
+
+        function updateAudioVolumes() {
+            if (bgmSound) bgmSound.volume = volMaster * volMusic;
+            if (mixiSound) mixiSound.volume = volMaster * volMobs;
+            if (dogSound) dogSound.volume = volMaster * volMobs;
+        }
+
+        // ==============================================================================================
+        // 🟩 QUẢN LÝ BLOCK & VẬT PHẨM (Khôi phục chuẩn V7.4 + Limit Data) 🟩
+        // ==============================================================================================
+        const BLOCKS = [
+            { id: 1, name: 'Đất', color: '#5d4037' }, { id: 2, name: 'Cỏ', color: '#4caf50' }, { id: 3, name: 'Đá', color: '#757575' },
+            { id: 4, name: 'Gỗ', color: '#6d4c41' }, { id: 5, name: 'Lá', color: '#2e7d32', transparent: true, opacity: 0.9 },
+            { id: 6, name: 'Cát', color: '#fdd835' }, { id: 7, name: 'Nước', color: '#03a9f4', transparent: true, opacity: 0.6, noCollide: true }, 
+            { id: 8, name: 'Gạch', color: '#bf360c' }, { id: 9, name: 'Kính', color: '#e0f7fa', transparent: true, opacity: 0.4 },
+            { id: 10, name: 'Cỏ dại', color: '#8bc34a', isPlant: true, noCollide: true }, { id: 11, name: 'Hoa đỏ', color: '#e53935', isPlant: true, noCollide: true }, 
+            { id: 12, name: 'Hoa vàng', color: '#ffeb3b', isPlant: true, noCollide: true }, { id: 13, name: 'Tấm ván', color: '#8d6e63' },
+            { id: 14, name: 'Quặng Than', color: '#757575', ore: '#1a1a1a' }, { id: 15, name: 'Quặng Sắt', color: '#757575', ore: '#d7ccc8' },
+            { id: 16, name: 'Quặng Vàng', color: '#757575', ore: '#fbc02d' }, { id: 17, name: 'Kim Cương', color: '#757575', ore: '#00e5ff' },
+            { id: 18, name: 'Kệ sách', color: '#5d4037', customArt: 'bookshelf' }, { id: 19, name: 'Bàn chế tạo', color: '#ffcc80', customArt: 'crafting' },
+            { id: 20, name: 'Rương', color: '#8d6e63', customArt: 'chest' },
+            { id: 21, name: 'Khối Meme Lỗi', imageUrl: 'https://uploads.onecompiler.io/43u4wb3ft/43u4y39cc/Screenshot%202026-03-20%20160022.png' },
+            { id: 22, name: 'Khối Tộc Trưởng', imageUrl: 'https://khoanhdep.com/wp-content/uploads/2026/02/meme-do-mixi-14.jpg' },
+            { id: 23, name: 'Khối Chó Doin', imageUrl: 'https://pbs.twimg.com/media/HCA4yJAXMAA5j4s.jpg' },
+            { id: 24, name: 'Đá Nền (Bedrock)', color: '#222222', ore: '#000000', indestructible: true }, // BEDROCK Ở -20
+            
+            // Vật phẩm cầm tay
+            { id: 25, name: 'Cúp Kim Cương', emoji: '⛏️', isItem: true }, { id: 31, name: 'Kiếm', emoji: '🗡️', isItem: true },
+            { id: 38, name: 'Bánh Mì', emoji: '🥖', isItem: true, heal: 20 }, { id: 42, name: 'Táo Vàng', emoji: '🍏', isItem: true, heal: 50 }
+        ];
+
+        let hotbarSlots = [2, 3, 4, 13, 17, 20, 24, 25, 38]; 
+        let currentHotbarIndex = 0; 
+
+        // ==============================================================================================
+        // 🟦 QUẢN LÝ GIAO DIỆN UI/UX 🟦
+        // ==============================================================================================
+        
+        function switchState(newState) {
+            const panels = ['main-menu', 'play-menu', 'options-menu', 'video-settings-menu', 'audio-settings-menu', 'controls-settings-menu', 'accessibility-settings-menu', 'achievements-menu', 'about-menu', 'pause-menu', 'inventory'];
+            panels.forEach(p => document.getElementById(p).style.display = 'none');
+            
+            document.getElementById('crosshair').style.display = 'none';
+            document.getElementById('hud').style.display = 'none';
+            document.getElementById('hotbar').style.display = 'none';
+            document.getElementById('fps').style.display = 'none';
+            document.getElementById('mobile-ui').style.display = 'none';
+            
+            gameState = newState;
+            updateAudioVolumes(); 
+
+            if (bgmSound) {
+                if (newState === 'PLAYING') { if (!bgmSound.paused) bgmSound.pause(); } 
+                else { if (bgmSound.paused && volMaster > 0 && volMusic > 0) bgmSound.play().catch(e => console.warn(e)); }
+            }
+
+            switch(newState) {
+                case 'MENU': document.getElementById('main-menu').style.display = 'flex'; break;
+                case 'PLAY_MENU': document.getElementById('play-menu').style.display = 'flex'; break;
+                case 'OPTIONS_MENU': document.getElementById('options-menu').style.display = 'flex'; break;
+                case 'VIDEO_MENU': document.getElementById('video-settings-menu').style.display = 'flex'; break;
+                case 'AUDIO_MENU': document.getElementById('audio-settings-menu').style.display = 'flex'; break;
+                case 'CONTROLS_MENU': document.getElementById('controls-settings-menu').style.display = 'flex'; break;
+                case 'ACCESS_MENU': document.getElementById('accessibility-settings-menu').style.display = 'flex'; break;
+                case 'ACHIEV_MENU': document.getElementById('achievements-menu').style.display = 'flex'; break;
+                case 'ABOUT_MENU': document.getElementById('about-menu').style.display = 'flex'; break;
+                case 'PAUSED': document.getElementById('pause-menu').style.display = 'flex'; break;
+                case 'INVENTORY': document.getElementById('inventory').style.display = 'flex'; break;
+                case 'PLAYING':
+                    document.getElementById('crosshair').style.display = isMobile ? 'none' : 'block';
+                    document.getElementById('hud').style.display = 'flex';
+                    document.getElementById('hotbar').style.display = 'flex';
+                    document.getElementById('fps').style.display = 'block';
+                    if (isMobile) document.getElementById('mobile-ui').style.display = 'block';
+                    break;
+            }
+        }
+
+        function setupUIEvents() {
+            document.getElementById('start-overlay').addEventListener('click', function() {
+                this.style.display = 'none';
+                document.getElementById('loading-overlay').style.display = 'flex';
+                setTimeout(() => { initEngine(); }, 100); 
+            });
+
+            document.getElementById('input-player-name').addEventListener('input', (e) => {
+                const val = e.target.value || "Steve";
+                document.getElementById('display-player-name').innerText = val;
+                document.getElementById('inv-player-name').innerText = val;
+            });
+
+            // MENU CHÍNH
+            document.getElementById('btn-goto-play').onclick = () => switchState('PLAY_MENU');
+            document.getElementById('btn-goto-achievements').onclick = () => { previousMenu = 'MENU'; switchState('ACHIEV_MENU'); };
+            document.getElementById('btn-goto-options').onclick = () => { previousMenu = 'MENU'; switchState('OPTIONS_MENU'); };
+            document.getElementById('btn-goto-about').onclick = () => { previousMenu = 'MENU'; switchState('ABOUT_MENU'); };
+            
+            // MENU PLAY
+            document.getElementById('slider-world-size').addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                const sizeLabel = document.getElementById('label-world-size');
+                if (val === 1) { sizeLabel.innerText = "Nhỏ (32x32) - Mượt"; sizeLabel.style.color = "#00FF00"; }
+                else if (val === 2) { sizeLabel.innerText = "Bình Thường (64x64)"; sizeLabel.style.color = "#FFFF00"; }
+                else { sizeLabel.innerText = "Khổng Lồ (128x128) - Nặng!"; sizeLabel.style.color = "#FF3333"; }
+            });
+            document.getElementById('btn-play-back').onclick = () => switchState('MENU');
+            document.getElementById('btn-create-world').onclick = () => {
+                const sizeVal = parseInt(document.getElementById('slider-world-size').value);
+                if (sizeVal === 1) WORLD_SIZE = 32; else if (sizeVal === 2) WORLD_SIZE = 64; else WORLD_SIZE = 128;
+                clearWorld(); generateWorld();
+                controls.getObject().position.set(0, 15, 0); controls.getObject().rotation.set(0, 0, 0);
+                switchState('PLAYING');
+                setTimeout(() => { if (!isMobile) controls.lock(); }, 150);
+                setTimeout(() => triggerAchievement('play'), 1500);
+            };
+
+            // MENU OPTIONS HUB
+            document.getElementById('btn-goto-video').onclick = () => switchState('VIDEO_MENU');
+            document.getElementById('btn-goto-audio').onclick = () => switchState('AUDIO_MENU');
+            document.getElementById('btn-goto-controls').onclick = () => switchState('CONTROLS_MENU');
+            document.getElementById('btn-goto-access').onclick = () => switchState('ACCESS_MENU');
+            document.getElementById('btn-options-back').onclick = () => switchState(previousMenu);
+
+            // --- XỬ LÝ VIDEO SETTINGS ---
+            document.getElementById('btn-opt-graphics').onclick = (e) => {
+                gfxFancy = !gfxFancy; e.target.innerText = `Graphics: ${gfxFancy ? 'Fancy' : 'Fast'}`;
+                initMaterials(); updateAllBlocksMaterials();
+            };
+            document.getElementById('slider-render-dist').addEventListener('input', (e) => {
+                RENDER_DISTANCE = parseInt(e.target.value);
+                document.getElementById('label-render-dist').innerText = `Render Distance: ${RENDER_DISTANCE}`;
+                if(camera) { camera.far = RENDER_DISTANCE + 20; camera.updateProjectionMatrix(); }
+                if(scene && scene.fog) scene.fog.far = RENDER_DISTANCE;
+            });
+            document.getElementById('btn-opt-smooth').onclick = (e) => {
+                smoothLighting = !smoothLighting; e.target.innerText = `Smooth Lighting: ${smoothLighting ? 'ON' : 'OFF'}`;
+                initMaterials(); updateAllBlocksMaterials();
+            };
+            document.getElementById('btn-opt-vsync').onclick = (e) => {
+                vsyncEnabled = !vsyncEnabled; e.target.innerText = `V-Sync: ${vsyncEnabled ? 'ON' : 'OFF'}`;
+            };
+            document.getElementById('btn-opt-particles').onclick = (e) => {
+                particleLevel = (particleLevel - 1 < 0) ? 2 : particleLevel - 1;
+                const pTexts = ["Minimal", "Decreased", "All"]; e.target.innerText = `Particles: ${pTexts[particleLevel]}`;
+            };
+            document.getElementById('btn-opt-shadows').onclick = (e) => {
+                entityShadows = !entityShadows; e.target.innerText = `Entity Shadows: ${entityShadows ? 'ON' : 'OFF'}`;
+            };
+            document.getElementById('btn-opt-fullscreen').onclick = (e) => {
+                if (!document.fullscreenElement) { document.documentElement.requestFullscreen(); e.target.innerText = "Fullscreen: ON"; } 
+                else { document.exitFullscreen(); e.target.innerText = "Fullscreen: OFF"; }
+            };
+            document.getElementById('btn-video-back').onclick = () => switchState('OPTIONS_MENU');
+
+            // --- XỬ LÝ AUDIO SETTINGS ---
+            const setupAudioSlider = (id, varName, labelStr) => {
+                document.getElementById(id).addEventListener('input', (e) => {
+                    const val = parseInt(e.target.value);
+                    if (varName === 'master') volMaster = val / 100;
+                    if (varName === 'music') volMusic = val / 100;
+                    if (varName === 'effects') volEffects = val / 100;
+                    if (varName === 'ambient') volAmbient = val / 100;
+                    if (varName === 'mobs') volMobs = val / 100;
+                    if (varName === 'blocks') volBlocks = val / 100;
+                    document.getElementById(`label-${id.replace('slider-','')}`).innerText = `${labelStr}: ${val}%`;
+                    updateAudioVolumes();
+                });
+            };
+            setupAudioSlider('slider-vol-master', 'master', 'Master Volume');
+            setupAudioSlider('slider-vol-music', 'music', 'Music (BGM)');
+            setupAudioSlider('slider-vol-effects', 'effects', 'Effects');
+            setupAudioSlider('slider-vol-ambient', 'ambient', 'Environment');
+            setupAudioSlider('slider-vol-mobs', 'mobs', 'Mob Voices');
+            setupAudioSlider('slider-vol-blocks', 'blocks', 'Blocks');
+            document.getElementById('btn-audio-back').onclick = () => switchState('OPTIONS_MENU');
+
+            // --- XỬ LÝ CONTROLS ---
+            document.getElementById('slider-mouse-sens').addEventListener('input', (e) => {
+                const val = parseInt(e.target.value);
+                mouseSensitivity = val / 100; 
+                document.getElementById('label-mouse-sens').innerText = `Mouse Sensitivity: ${val}%`;
+                if (controls) controls.pointerSpeed = invertMouse ? -mouseSensitivity : mouseSensitivity;
+            });
+            document.getElementById('btn-opt-invert').onclick = (e) => {
+                invertMouse = !invertMouse; e.target.innerText = `Invert Mouse: ${invertMouse ? 'ON' : 'OFF'}`;
+                if (controls) controls.pointerSpeed = invertMouse ? -mouseSensitivity : mouseSensitivity;
+            };
+            document.getElementById('btn-controls-back').onclick = () => switchState('OPTIONS_MENU');
+
+            // --- XỬ LÝ ACCESSIBILITY ---
+            document.getElementById('btn-opt-lang').onclick = (e) => {
+                langVi = !langVi; e.target.innerText = `Language: ${langVi ? 'Tiếng Việt' : 'English'}`;
+            };
+            document.getElementById('btn-opt-chat').onclick = (e) => {
+                chatSize = (chatSize + 1) % 3;
+                const cTexts = ["Small", "Normal", "Large"]; e.target.innerText = `Chat Settings: ${cTexts[chatSize]}`;
+            };
+            document.getElementById('btn-opt-contrast').onclick = (e) => {
+                highContrast = !highContrast; e.target.innerText = `High Contrast: ${highContrast ? 'ON' : 'OFF'}`;
+                if (highContrast) document.body.classList.add('high-contrast'); else document.body.classList.remove('high-contrast');
+            };
+            document.getElementById('btn-access-back').onclick = () => switchState('OPTIONS_MENU');
+
+            // CÁC NÚT KHÁC
+            document.getElementById('btn-achiev-back').onclick = () => switchState(previousMenu);
+            document.getElementById('btn-about-back').onclick = () => switchState(previousMenu);
+            document.getElementById('btn-donate').onclick = () => { window.open('https://foxanime.vercel.app/donate.html', '_blank'); };
+
+            // PAUSE MENU
+            document.getElementById('btn-pause-options').onclick = () => { previousMenu = 'PAUSED'; switchState('OPTIONS_MENU'); };
+            document.getElementById('btn-resume').onclick = () => { switchState('PLAYING'); setTimeout(() => { if(gameState === 'PLAYING' && !isMobile) controls.lock(); }, 150); };
+            document.getElementById('btn-quit').onclick = () => { clearWorld(); WORLD_SIZE = 64; generateWorld(); switchState('MENU'); };
+            
+            setupMobileControls();
+        }
+
+        function getBlockContentHTML(b, index) {
+            let numHtml = index !== undefined ? `<span class="slot-num">${index+1}</span>` : '';
+            if (b.emoji) return `${b.emoji} ${numHtml}`;
+            else if (textures[b.id]) return `<img src="${textures[b.id]}" class="slot-img"> ${numHtml}`;
+            return numHtml;
+        }
+
+        function renderHotbar() {
+            const hotbar = document.getElementById('hotbar'); hotbar.innerHTML = '';
+            hotbarSlots.forEach((blockId, index) => {
+                const b = BLOCKS.find(bl => bl.id === blockId);
+                const div = document.createElement('div'); div.className = index === currentHotbarIndex ? 'slot active' : 'slot';
+                if(b) div.innerHTML = getBlockContentHTML(b, index);
+                div.onclick = (e) => { e.stopPropagation(); currentHotbarIndex = index; renderHotbar(); };
+                hotbar.appendChild(div);
+            });
+        }
+
+        function renderInventory() {
+            const grid = document.getElementById('inv-grid'); grid.innerHTML = '';
+            BLOCKS.forEach(b => {
+                const div = document.createElement('div'); div.className = 'inv-item';
+                div.innerHTML = `${getBlockContentHTML(b)} <div class="tooltip">${b.name}</div>`;
+                div.onclick = (e) => { e.stopPropagation(); hotbarSlots[currentHotbarIndex] = b.id; renderHotbar(); };
+                grid.appendChild(div);
+            });
+        }
+
+        function selectHotbarSlot(index) { 
+            currentHotbarIndex = index; 
+            renderHotbar(); 
+        }
+
+        function toggleInventory() {
+            isInventoryOpen = !isInventoryOpen;
+            if (isInventoryOpen) { gameState = 'INVENTORY'; controls.unlock(); document.getElementById('inventory').style.display = 'flex'; document.getElementById('crosshair').style.display = 'none'; document.getElementById('mobile-ui').style.display = 'none'; } 
+            else { closeInventory(); }
+        }
+        
+        function closeInventory() {
+            isInventoryOpen = false; gameState = 'PLAYING'; document.getElementById('inventory').style.display = 'none'; document.getElementById('crosshair').style.display = isMobile ? 'none' : 'block'; 
+            if (isMobile) document.getElementById('mobile-ui').style.display = 'block';
+            setTimeout(() => { if (gameState === 'PLAYING' && !isMobile) controls.lock(); }, 150);
+        }
+
+        function updateAllBlocksMaterials() {
+            objects.forEach(obj => { if (obj.userData && obj.userData.id) obj.material = materials[obj.userData.id]; });
+        }
+
+        // ==============================================================================================
+        // 🟥🟥🟥 PHẦN 3: LÕI GAME & LOGIC 3D (GIỚI HẠN Y = 180 TỚI -20) 🟥🟥🟥
+        // ==============================================================================================
+        
+        function generateTexture(block) {
+            if (block.isItem) return null;
+            const size = 32; const canvas = document.createElement('canvas'); canvas.width = size; canvas.height = size;
+            const ctx = canvas.getContext('2d'); ctx.fillStyle = block.color; 
+            
+            if (block.isPlant) {
+                ctx.clearRect(0, 0, size, size); ctx.fillStyle = block.color;
+                if(block.id === 10) { ctx.fillRect(10, 10, 4, 22); ctx.fillRect(18, 14, 4, 18); ctx.fillRect(14, 6, 4, 26); } 
+                else if(block.id === 11 || block.id === 12) { 
+                    ctx.fillStyle = '#4caf50'; ctx.fillRect(14, 16, 4, 16); ctx.fillStyle = block.color; 
+                    ctx.beginPath(); ctx.arc(16, 10, 6, 0, Math.PI*2); ctx.fill(); ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(16, 10, 2, 0, Math.PI*2); ctx.fill(); 
+                }
+            } else {
+                ctx.fillRect(0, 0, size, size);
+                for (let i = 0; i < size * size * 1.2; i++) { ctx.fillStyle = `rgba(0,0,0,${Math.random() * 0.15})`; ctx.fillRect(Math.random() * size, Math.random() * size, 2, 2); }
+                if (block.ore) { ctx.fillStyle = block.ore; for (let i = 0; i < 15; i++) ctx.fillRect(Math.random() * 26 + 2, Math.random() * 26 + 2, 4, 4); }
+                if (block.id === 9) { ctx.strokeStyle = 'rgba(255,255,255,0.8)'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(5, 25); ctx.lineTo(15, 15); ctx.stroke(); }
+                if (block.customArt === 'bookshelf') {
+                    ctx.fillStyle = '#3e2723'; ctx.fillRect(0, 14, 32, 4);
+                    const colors = ['#f44336', '#4caf50', '#2196f3', '#ffeb3b', '#9c27b0'];
+                    for(let i=2; i<30; i+=4) { ctx.fillStyle = colors[Math.floor(Math.random()*colors.length)]; ctx.fillRect(i, 2, 3, 12); ctx.fillRect(i, 18, 3, 12); }
+                } else if (block.customArt === 'crafting') {
+                    ctx.strokeStyle = '#5d4037'; ctx.lineWidth = 2; ctx.strokeRect(4,4,24,24); ctx.beginPath();
+                    ctx.moveTo(12,4); ctx.lineTo(12,28); ctx.moveTo(20,4); ctx.lineTo(20,28);
+                    ctx.moveTo(4,12); ctx.lineTo(28,12); ctx.moveTo(4,20); ctx.lineTo(28,20); ctx.stroke();
+                } else if (block.customArt === 'chest') {
+                    ctx.strokeStyle = '#000'; ctx.lineWidth = 2; ctx.strokeRect(2, 2, 28, 28);
+                    ctx.fillStyle = '#bdbdbd'; ctx.fillRect(12, 12, 8, 8); ctx.fillStyle = '#000'; ctx.fillRect(14, 16, 4, 4);
+                }
+                ctx.strokeStyle = block.id === 9 ? 'rgba(255,255,255,0.5)' : 'rgba(0,0,0,0.2)'; ctx.lineWidth = block.id === 9 ? 4 : 1; ctx.strokeRect(0,0,size,size);
+            }
+            textures[block.id] = canvas.toDataURL();
+            const tex = new THREE.CanvasTexture(canvas); tex.magFilter = THREE.NearestFilter; return tex;
+        }
+
+        function initMaterials() {
+            const textureLoader = new THREE.TextureLoader(); textureLoader.crossOrigin = "anonymous";
+            BLOCKS.forEach(b => {
+                if (b.isItem) return;
+                if (b.imageUrl) {
+                    const proxyUrl = `https://images.weserv.nl/?url=${encodeURIComponent(b.imageUrl)}`;
+                    textures[b.id] = proxyUrl; materials[b.id] = new THREE.MeshLambertMaterial({ color: 0xcccccc, flatShading: !smoothLighting });
+                    textureLoader.load(proxyUrl, (tex) => { tex.colorSpace = THREE.SRGBColorSpace; tex.magFilter = THREE.NearestFilter; materials[b.id].map = tex; materials[b.id].color.set(0xffffff); materials[b.id].needsUpdate = true; }, undefined, (err) => console.warn(err)); return; 
+                }
+                const tex = generateTexture(b); const matConfig = { map: tex, flatShading: !smoothLighting };
+                if (b.transparent || b.isPlant) {
+                    if (!gfxFancy && b.id === 5) matConfig.transparent = false;
+                    else { matConfig.transparent = true; matConfig.opacity = b.opacity || 1; matConfig.alphaTest = 0.5; matConfig.depthWrite = b.id !== 9; matConfig.side = b.isPlant ? THREE.DoubleSide : THREE.FrontSide; }
+                }
+                if (b.id === 2) { 
+                    const dirtTex = materials[1].map; const sideCanvas = document.createElement('canvas'); sideCanvas.width = 32; sideCanvas.height = 32; const ctx = sideCanvas.getContext('2d');
+                    ctx.fillStyle = BLOCKS[0].color; ctx.fillRect(0,0,32,32); ctx.fillStyle = b.color; ctx.fillRect(0,0,32,10);
+                    for(let i=0; i<32; i+=4) { if(Math.random()>0.5) ctx.fillRect(i, 10, 4, 4); } 
+                    const sideTex = new THREE.CanvasTexture(sideCanvas); sideTex.magFilter = THREE.NearestFilter;
+                    materials[b.id] = [ new THREE.MeshLambertMaterial({ map: sideTex }), new THREE.MeshLambertMaterial({ map: sideTex }), new THREE.MeshLambertMaterial({ map: tex }), new THREE.MeshLambertMaterial({ map: dirtTex }), new THREE.MeshLambertMaterial({ map: sideTex }), new THREE.MeshLambertMaterial({ map: sideTex }) ];
+                } else { materials[b.id] = new THREE.MeshLambertMaterial(matConfig); }
+            });
+        }
+
+        function initEngine() {
+            initMaterials(); renderHotbar(); renderInventory();
+
+            scene = new THREE.Scene(); scene.background = new THREE.Color(0x87CEEB); scene.fog = new THREE.Fog(0x87CEEB, 10, RENDER_DISTANCE); 
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, RENDER_DISTANCE + 20);
+            menuCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, RENDER_DISTANCE + 20); menuCamera.position.set(0, 4.5, 0); 
+            
+            ambLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambLight);
+            dirLight = new THREE.DirectionalLight(0xffffff, 0.8); scene.add(dirLight);
+
+            sun = new THREE.Mesh(new THREE.BoxGeometry(12, 12, 0.1), new THREE.MeshBasicMaterial({color: 0xffe600, transparent: true, opacity: 0.9})); scene.add(sun);
+            moon = new THREE.Mesh(new THREE.BoxGeometry(10, 10, 0.1), new THREE.MeshBasicMaterial({color: 0xdddddd})); scene.add(moon);
+            cloudGroup = new THREE.Group();
+            for(let i=0; i<30; i++) {
+                const cloud = new THREE.Mesh(new THREE.BoxGeometry(Math.random()*15+10, Math.random()*2+2, Math.random()*15+10), new THREE.MeshBasicMaterial({color: 0xffffff, transparent: true, opacity: 0.6}));
+                cloud.position.set((Math.random()-0.5)*200, 45 + Math.random()*5, (Math.random()-0.5)*200); cloudGroup.add(cloud);
+            }
+            scene.add(cloudGroup);
+
+            let canLoadAudio = window.location.protocol !== 'blob:';
+            if (canLoadAudio) {
+                try {
+                    mixiSound = new Audio('amthanh/alo-vu-ha-em.mp3'); dogSound = new Audio('amthanh/what-dog-doin.mp3');
+                    bgmSound = new Audio('amthanh/and-action.mp3'); bgmSound.loop = true;
+                    achievSound = new Audio('amthanh/challenge_complete.mp3'); 
+                    updateAudioVolumes();
+                } catch(e) {}
+            }
+
+            controls = new PointerLockControls(camera, document.body);
+            controls.pointerSpeed = mouseSensitivity;
+            
+            document.addEventListener('click', (e) => { 
+                if (e.target.closest('.mc-btn') || e.target.closest('.menu-panel') || e.target.closest('#inventory')) return;
+                if (gameState === 'PLAYING' && !isInventoryOpen && !controls.isLocked) controls.lock(); 
+            });
+            controls.addEventListener('unlock', () => { if(gameState === 'PLAYING' && !isInventoryOpen) switchState('PAUSED'); });
+            scene.add(controls.getObject());
+
+            raycaster = new THREE.Raycaster(); raycaster.far = 7; 
+            outlineMesh = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.002, 1.002, 1.002)), new THREE.LineBasicMaterial({ color: 0x000000, linewidth: 2 }));
+            outlineMesh.visible = false; scene.add(outlineMesh);
+
+            WORLD_SIZE = 64; generateWorld(); controls.getObject().position.set(0, 15, 0); 
+
+            renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "high-performance" });
+            renderer.setPixelRatio(window.devicePixelRatio); renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            window.addEventListener('resize', onWindowResize); document.addEventListener('keydown', onKeyDown); document.addEventListener('keyup', onKeyUp); document.addEventListener('mousedown', onMouseDown);
+
+            document.getElementById('loading-overlay').style.display = 'none';
+            switchState('MENU'); animate();
+        }
+
+        function clearWorld() { objects.forEach(obj => scene.remove(obj)); objects.length = 0; worldMap.clear(); entities.forEach(ent => scene.remove(ent.mesh)); entities.length = 0; }
+
+        function generateWorld() {
+            const simplex = (x, z) => Math.sin(x * 0.1) * Math.cos(z * 0.1) * 4; 
+            const VILLAGE_RADIUS = 15; 
+            for (let x = -WORLD_SIZE/2; x < WORLD_SIZE/2; x++) {
+                for (let z = -WORLD_SIZE/2; z < WORLD_SIZE/2; z++) {
+                    const isVillageZone = Math.abs(x) < VILLAGE_RADIUS && Math.abs(z) < VILLAGE_RADIUS;
+                    let h = Math.floor(simplex(x, z)); if (isVillageZone) h = 0; 
+                    let surfaceBlock = 2; if (h < -2) surfaceBlock = 6; if (h < -3) surfaceBlock = 7; 
+                    
+                    // 🪨 Lót nền Bedrock ở độ sâu -20
+                    createBlock(x, -20, z, 24); 
+
+                    if (surfaceBlock !== 7) {
+                        createBlock(x, h, z, surfaceBlock); createBlock(x, h - 1, z, 1);
+                        // Đào đất đá xuống -19
+                        for (let dy = h - 2; dy >= -19; dy--) {
+                            let rockId = 3; const randOre = Math.random();
+                            if (randOre < 0.02) rockId = 17; else if (randOre < 0.05) rockId = 16; else if (randOre < 0.1) rockId = 15; else if (randOre < 0.15) rockId = 14; 
+                            createBlock(x, dy, z, rockId);
+                        }
+                        if (!isVillageZone && surfaceBlock === 2) {
+                            const rand = Math.random();
+                            if (rand < 0.015) createTree(x, h + 1, z);
+                            else if (rand < 0.08) createPlant(x, h + 1, z, 10); 
+                            else if (rand < 0.1) createPlant(x, h + 1, z, 11); 
+                            else if (rand < 0.12) createPlant(x, h + 1, z, 12); 
+                        }
+                    } else { 
+                        createBlock(x, -3, z, 7); createBlock(x, -4, z, 6); 
+                        for (let dy = -5; dy >= -19; dy--) createBlock(x, dy, z, 3); 
+                    }
+                }
+            }
+            buildVillage(); spawnEntities();
+        }
+
+        function createPlant(x, y, z, id) {
+            const key = `${Math.round(x)},${Math.round(y)},${Math.round(z)}`; if (worldMap.has(key)) return;
+            const mat = materials[id]; const geom = new THREE.PlaneGeometry(0.8, 0.8);
+            const mesh1 = new THREE.Mesh(geom, mat); mesh1.rotation.y = Math.PI / 4; const mesh2 = new THREE.Mesh(geom, mat); mesh2.rotation.y = -Math.PI / 4;
+            const group = new THREE.Group(); group.add(mesh1); group.add(mesh2); group.position.set(x, y - 0.1, z); 
+            group.matrixAutoUpdate = false; group.updateMatrix(); group.userData = { id: id, isSolid: false };
+            scene.add(group); objects.push(group); worldMap.set(key, group);
+        }
+
+        function buildVillage() {
+            for(let i=-2; i<=2; i++) {
+                for(let j=-2; j<=2; j++) {
+                    if (Math.abs(i) === 2 || Math.abs(j) === 2) createBlock(i, 1, j, 3);
+                    else { destroyBlockAt(i, 0, j); createBlock(i, 0, j, 7); createBlock(i, -1, j, 3); }
+                }
+            }
+            createBlock(-2, 2, -2, 4); createBlock(2, 2, -2, 4); createBlock(-2, 2, 2, 4); createBlock(2, 2, 2, 4);
+            for(let i=-2; i<=2; i++){ for(let j=-2; j<=2; j++){ createBlock(i, 3, j, 8); } }
+            for(let i=-18; i<=18; i++) {
+                if (Math.abs(i) > 2) { 
+                    destroyBlockAt(i, 0, 0); destroyBlockAt(i, 0, 1); destroyBlockAt(i, 0, -1); createBlock(i, 0, 0, 6); createBlock(i, 0, 1, 6); createBlock(i, 0, -1, 6);
+                    destroyBlockAt(0, 0, i); destroyBlockAt(1, 0, i); destroyBlockAt(-1, 0, i); createBlock(0, 0, i, 6); createBlock(1, 0, i, 6); createBlock(-1, 0, i, 6);
+                }
+            }
+            createHouse(7, 1, 7, 5, 4, 6); createHouse(-12, 1, 7, 5, 4, 5); createHouse(7, 1, -12, 6, 5, 5);
+            createBlock(0, 1, 4, 21); createBlock(0, 1, -4, 22); createBlock(4, 1, 0, 23); 
+        }
+
+        function createHouse(startX, startY, startZ, width, height, depth) {
+            for(let x=0; x<width; x++) {
+                for(let y=0; y<height; y++) {
+                    for(let z=0; z<depth; z++) {
+                        const px = startX + x; const py = startY + y; const pz = startZ + z;
+                        if (x > 0 && x < width-1 && y > 0 && y < height-1 && z > 0 && z < depth-1) {
+                            if (y === 1 && x === 1 && z === depth-2) createBlock(px, py, pz, 18); 
+                            if (y === 1 && x === width-2 && z === depth-2) createBlock(px, py, pz, 20); 
+                            if (y === 1 && x === width-2 && z === 1) createBlock(px, py, pz, 19); 
+                            continue;
+                        }
+                        if (x === Math.floor(width/2) && y < 2 && z === 0) continue;
+                        let blockId = 4; 
+                        if (y === 1 && (x === 1 || x === width-2 || z === Math.floor(depth/2)) && (x !== Math.floor(width/2) && z !== 0)) blockId = 9; 
+                        if (y === 0) blockId = 13; if (y === height - 1) blockId = 8; 
+                        if (y === 0) destroyBlockAt(px, py, pz); 
+                        createBlock(px, py, pz, blockId);
+                    }
+                }
+            }
+        }
+
+        function createTree(x, y, z) {
+            createBlock(x, y, z, 4); createBlock(x, y+1, z, 4); createBlock(x, y+2, z, 4);
+            for(let i=-1; i<=1; i++) { for(let j=-1; j<=1; j++) { createBlock(x+i, y+3, z+j, 5); if(Math.abs(i)+Math.abs(j) < 2) createBlock(x+i, y+4, z+j, 5); } }
+        }
+
+        function spawnEntities() {
+            const countFactor = WORLD_SIZE/64;
+            const types = [{ type: 'pig', color: 0xffb6c1, w: 0.6, h: 0.6, l: 0.9, count: 4 * countFactor }, { type: 'villager', color: 0x8b4513, w: 0.6, h: 1.8, l: 0.6, count: 3 }];
+            types.forEach(t => {
+                for(let i=0; i<t.count; i++) {
+                    const mesh = new THREE.Mesh(new THREE.BoxGeometry(t.w, t.h, t.l), new THREE.MeshLambertMaterial({ color: t.color })); 
+                    mesh.position.set((Math.random() - 0.5) * (WORLD_SIZE/2), 15, (Math.random() - 0.5) * (WORLD_SIZE/2)); scene.add(mesh);
+                    entities.push({ mesh: mesh, type: t.type, vy: 0, vx: 0, vz: 0, timer: Math.random() * 100, halfH: t.h / 2 });
+                }
+            });
+        }
+
+        function updateEntities(delta) {
+            entities.forEach(ent => {
+                ent.vy -= GRAVITY * delta; ent.timer -= delta * 10;
+                if (ent.timer <= 0) {
+                    ent.timer = Math.random() * 50 + 20;
+                    if (Math.random() > 0.5) { ent.vx = 0; ent.vz = 0; }
+                    else { const angle = Math.random() * Math.PI * 2; const speed = ent.type === 'villager' ? 1.5 : 1; ent.vx = Math.cos(angle) * speed; ent.vz = Math.sin(angle) * speed; ent.mesh.rotation.y = -angle + Math.PI/2; }
+                    if (Math.random() < 0.2) ent.vy = 6; 
+                }
+                let nextX = ent.mesh.position.x + ent.vx * delta; let nextY = ent.mesh.position.y + ent.vy * delta; let nextZ = ent.mesh.position.z + ent.vz * delta;
+                if (checkCollisionEntity(ent.mesh.position.x, nextY - ent.halfH, ent.mesh.position.z)) { ent.vy = 0; nextY = ent.mesh.position.y; }
+                if (checkCollisionEntity(nextX, nextY - ent.halfH + 0.1, ent.mesh.position.z)) ent.vx *= -1; 
+                if (checkCollisionEntity(ent.mesh.position.x, nextY - ent.halfH + 0.1, nextZ)) ent.vz *= -1;
+                ent.mesh.position.set(nextX, nextY, nextZ); if (ent.mesh.position.y < -20) ent.mesh.position.set(0, 10, 0); 
+            });
+        }
+
+        function checkCollisionEntity(x, y, z) { const b = worldMap.get(`${Math.round(x)},${Math.round(y)},${Math.round(z)}`); return b && b.userData.isSolid; }
+
+        function createBlock(x, y, z, id) {
+            const rx = Math.round(x), ry = Math.round(y), rz = Math.round(z); const key = `${rx},${ry},${rz}`;
+            if (worldMap.has(key)) return; 
+            const bInfo = BLOCKS.find(b => b.id === id); if (bInfo && bInfo.isItem) return;
+
+            const mesh = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), materials[id]);
+            mesh.position.set(rx, ry, rz); mesh.matrixAutoUpdate = false; mesh.updateMatrix();
+            mesh.castShadow = true; mesh.receiveShadow = true; 
+            mesh.userData = { id: id, isSolid: !bInfo.noCollide, indestructible: !!bInfo.indestructible };
+            scene.add(mesh); objects.push(mesh); worldMap.set(key, mesh); 
+            
+            if (gameState === 'PLAYING') {
+                if (id === 22 && mixiSound) { mixiSound.currentTime = 0; mixiSound.volume = volMaster * volMobs; mixiSound.play().catch(e=>{}); triggerAchievement('mixi'); }
+                if (id === 23 && dogSound) { dogSound.currentTime = 0; dogSound.volume = volMaster * volMobs; dogSound.play().catch(e=>{}); triggerAchievement('dog'); }
+                if (id === 21) triggerAchievement('bamia');
+            }
+        }
+
+        function destroyBlockAt(x, y, z) {
+            const key = `${Math.round(x)},${Math.round(y)},${Math.round(z)}`;
+            if (worldMap.has(key)) {
+                const mesh = worldMap.get(key);
+                if (mesh.userData.indestructible) return; // Chặn đập Bedrock
+                
+                if (gameState === 'PLAYING') {
+                    if (mesh.userData.id === 4) triggerAchievement('wood'); 
+                    if (mesh.userData.id === 17) triggerAchievement('diamond');
+                }
+                scene.remove(mesh); const idx = objects.indexOf(mesh); if(idx > -1) objects.splice(idx, 1); worldMap.delete(key);
+            }
+        }
+
+        function performBlockAction(button) {
+            const aItem = BLOCKS.find(b => b.id === hotbarSlots[currentHotbarIndex]);
+            if (aItem && aItem.isItem && button === 2) {
+                if (aItem.heal) { playerHealth = Math.min(100, playerHealth + aItem.heal); document.getElementById('health-fill').style.width = playerHealth + '%'; triggerAchievement('eat'); }
+                return;
+            }
+            raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
+            const intersects = raycaster.intersectObjects(objects, true); 
+            if (intersects.length > 0 && intersects[0].object.visible !== false) {
+                let targetObj = intersects[0].object; if (targetObj.parent && targetObj.parent.type === 'Group') targetObj = targetObj.parent;
+                if (button === 0) destroyBlockAt(targetObj.position.x, Math.round(targetObj.position.y), targetObj.position.z); 
+                else if (button === 2) { 
+                    if (aItem && aItem.isItem) return; 
+                    let pX, pY, pZ;
+                    if (targetObj.userData.isSolid === false) { pX = Math.round(targetObj.position.x); pY = Math.round(targetObj.position.y); pZ = Math.round(targetObj.position.z); destroyBlockAt(pX, pY, pZ); } 
+                    else { const norm = intersects[0].face.normal.clone(); pX = Math.round(targetObj.position.x + norm.x); pY = Math.round(targetObj.position.y + norm.y); pZ = Math.round(targetObj.position.z + norm.z); }
+                    
+                    // ☁️ GIỚI HẠN BẦU TRỜI Y = 180 VÀ 🪨 LÕI ĐẤT Y = -20
+                    if (pY > 180) { triggerAchievement('build_limit'); return; }
+                    if (pY < -20) return;
+
+                    const pPos = controls.getObject().position;
+                    if (pX === Math.round(pPos.x) && pZ === Math.round(pPos.z) && (pY >= Math.round(pPos.y - 1.4) && pY <= Math.round(pPos.y + 0.2))) return;
+                    if (BLOCKS.find(b => b.id === hotbarSlots[currentHotbarIndex]).isPlant) createPlant(pX, pY, pZ, hotbarSlots[currentHotbarIndex]); else createBlock(pX, pY, pZ, hotbarSlots[currentHotbarIndex]);
+                }
+            }
+        }
+
+        function onMouseDown(event) {
+            if (!controls.isLocked || gameState !== 'PLAYING') return;
+            performBlockAction(event.button);
+        }
+
+        function setupMobileControls() {
+            if (!isMobile) return;
+            const addTouch = (id, startCb, endCb) => {
+                const el = document.getElementById(id); if(!el) return;
+                el.addEventListener('touchstart', (e) => { e.preventDefault(); startCb(); }, {passive: false});
+                if (endCb) {
+                    el.addEventListener('touchend', (e) => { e.preventDefault(); endCb(); }, {passive: false});
+                    el.addEventListener('touchcancel', (e) => { e.preventDefault(); endCb(); }, {passive: false});
+                }
+            };
+            addTouch('btn-up', () => moveForward = true, () => moveForward = false);
+            addTouch('btn-down', () => moveBackward = true, () => moveBackward = false);
+            addTouch('btn-left', () => moveLeft = true, () => moveLeft = false);
+            addTouch('btn-right', () => moveRight = true, () => moveRight = false);
+            
+            addTouch('btn-jump', () => { if (canJump || flyMode) { velocity.y = flyMode ? JUMP_FORCE : JUMP_FORCE; canJump = false; } });
+            addTouch('btn-fly', () => { flyMode = !flyMode; velocity.y = 0; document.getElementById('btn-fly').style.background = flyMode ? 'rgba(0,255,255,0.6)' : 'rgba(0,255,255,0.2)'; });
+            addTouch('btn-break', () => performBlockAction(0));
+            addTouch('btn-place', () => performBlockAction(2));
+            addTouch('btn-inv', () => toggleInventory());
+            addTouch('btn-mobile-pause', () => switchState('PAUSED'));
+
+            document.addEventListener('touchstart', (e) => {
+                if (gameState !== 'PLAYING') return;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const t = e.changedTouches[i];
+                    if (!t.target.classList.contains('mob-btn') && !t.target.closest('#hotbar')) {
+                        if (lookTouchId === null) { lookTouchId = t.identifier; lastLookX = t.clientX; lastLookY = t.clientY; }
+                    }
+                }
+            }, {passive: false});
+
+            document.addEventListener('touchmove', (e) => {
+                if (gameState !== 'PLAYING') return;
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    const t = e.changedTouches[i];
+                    if (t.identifier === lookTouchId) {
+                        const dx = t.clientX - lastLookX; const dy = t.clientY - lastLookY;
+                        lastLookX = t.clientX; lastLookY = t.clientY;
+                        const euler = new THREE.Euler(0, 0, 0, 'YXZ');
+                        euler.setFromQuaternion(camera.quaternion);
+                        const inv = invertMouse ? -1 : 1;
+                        euler.y -= dx * 0.005 * mouseSensitivity;
+                        euler.x -= dy * 0.005 * mouseSensitivity * inv;
+                        euler.x = Math.max(-Math.PI/2, Math.min(Math.PI/2, euler.x));
+                        camera.quaternion.setFromEuler(euler);
+                    }
+                }
+            }, {passive: false});
+
+            const endLook = (e) => {
+                for (let i = 0; i < e.changedTouches.length; i++) {
+                    if (e.changedTouches[i].identifier === lookTouchId) lookTouchId = null;
+                }
+            };
+            document.addEventListener('touchend', endLook);
+            document.addEventListener('touchcancel', endLook);
+        }
+
+        function onKeyDown(event) {
+            if (gameState !== 'PLAYING' && gameState !== 'INVENTORY') return;
+            if(event.code === 'KeyE') { toggleInventory(); return; }
+            if(event.code === 'Escape' && gameState === 'INVENTORY') { switchState('PLAYING'); return; }
+            if(gameState === 'INVENTORY') return; 
+            switch (event.code) {
+                case 'KeyW': moveForward = true; break; case 'KeyA': moveLeft = true; break;
+                case 'KeyS': moveBackward = true; break; case 'KeyD': moveRight = true; break;
+                case 'Space': if (canJump || flyMode) { velocity.y = flyMode ? JUMP_FORCE : JUMP_FORCE; canJump = false; } break;
+                case 'KeyF': flyMode = !flyMode; velocity.y = 0; break;
+                case 'Digit1': selectHotbarSlot(0); break; case 'Digit2': selectHotbarSlot(1); break;
+                case 'Digit3': selectHotbarSlot(2); break; case 'Digit4': selectHotbarSlot(3); break;
+                case 'Digit5': selectHotbarSlot(4); break; case 'Digit6': selectHotbarSlot(5); break;
+                case 'Digit7': selectHotbarSlot(6); break; case 'Digit8': selectHotbarSlot(7); break;
+                case 'Digit9': selectHotbarSlot(8); break;
+            }
+        }
+        function onKeyUp(event) {
+            switch (event.code) { case 'KeyW': moveForward = false; break; case 'KeyA': moveLeft = false; break; case 'KeyS': moveBackward = false; break; case 'KeyD': moveRight = false; break; }
+        }
+        function onWindowResize() {
+            if (!camera) return;
+            camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix();
+            if (menuCamera) { menuCamera.aspect = window.innerWidth / window.innerHeight; menuCamera.updateProjectionMatrix(); }
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function checkCollision(px, py, pz) {
+            const r = 0.25; const h = 1.4; const minX = Math.round(px - r); const maxX = Math.round(px + r); const minY = Math.round(py - h); const maxY = Math.round(py + 0.2); const minZ = Math.round(pz - r); const maxZ = Math.round(pz + r);
+            for (let x = minX; x <= maxX; x++) { for (let y = minY; y <= maxY; y++) { for (let z = minZ; z <= maxZ; z++) { 
+                if (y < -20) return true; // Giới hạn sàn cứng ở -20
+                const b = worldMap.get(`${x},${y},${z}`); if (b && b.userData.isSolid) return true; 
+            } } }
+            return false;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate); if (!controls) return;
+            const time = performance.now(); const delta = Math.min((time - prevTime) / 1000, 0.1); frames++;
+            if (time >= lastFpsTime + 1000) { document.getElementById('fps').innerText = `FPS: ${frames}`; frames = 0; lastFpsTime = time; }
+            
+            updateEntities(delta); 
+
+            let activeCam = (gameState === 'MENU' || gameState === 'PLAY_MENU' || gameState.includes('_MENU')) && menuCamera ? menuCamera : camera;
+            
+            dayTime += delta * (Math.PI / 600); if (dayTime > Math.PI * 2) dayTime -= Math.PI * 2;
+            const orbitR = Math.max(RENDER_DISTANCE - 10, 50); const cx = activeCam.position.x; const cz = activeCam.position.z;
+            if(sun) { sun.position.set(cx + Math.cos(dayTime) * orbitR, Math.sin(dayTime) * orbitR, cz); sun.lookAt(activeCam.position); }
+            if(moon) { moon.position.set(cx - Math.cos(dayTime) * orbitR, -Math.sin(dayTime) * orbitR, cz); moon.lookAt(activeCam.position); }
+            if(cloudGroup) { cloudGroup.children.forEach(c => { c.position.x += delta * 1.5; if (c.position.x > cx + 150) c.position.x = cx - 150; if (c.position.x < cx - 150) c.position.x = cx + 150; if (c.position.z > cz + 150) c.position.z = cz - 150; if (c.position.z < cz - 150) c.position.z = cz + 150; }); }
+
+            const elev = Math.sin(dayTime); const dayC = new THREE.Color(0x87CEEB); const sunsetC = new THREE.Color(0xfda65e); const nightC = new THREE.Color(0x050515); let skyC = new THREE.Color();
+            if (elev > 0.2) { skyC.lerpColors(sunsetC, dayC, (elev - 0.2) / 0.8); if(dirLight && sun) { dirLight.position.copy(sun.position); dirLight.intensity = elev * 0.8; } if(ambLight) ambLight.intensity = 0.4 + elev * 0.4; } 
+            else if (elev > -0.1) { let t = (elev + 0.1) / 0.3; skyC.lerpColors(nightC, sunsetC, t); if(dirLight && sun) { dirLight.position.copy(sun.position); dirLight.intensity = Math.max(0, elev) * 0.8; } if(ambLight) ambLight.intensity = 0.2 + Math.max(0, elev) * 0.4; } 
+            else { skyC.copy(nightC); if(dirLight && moon) { dirLight.position.copy(moon.position); dirLight.intensity = -elev * 0.2; } if(ambLight) ambLight.intensity = 0.2; }
+            
+            scene.background = skyC; if(scene.fog) scene.fog.color = skyC;
+
+            if (gameState === 'MENU' || gameState === 'PLAY_MENU' || gameState.includes('_MENU')) {
+                if (menuCamera) { 
+                    const camTime = time * 0.0001; menuCamera.position.set(0, 4.5, 0); menuCamera.lookAt(Math.sin(camTime) * 10, 4.5, Math.cos(camTime) * 10); 
+                    renderer.render(scene, menuCamera); 
+                }
+            } 
+            else if ((controls.isLocked || isMobile) && gameState === 'PLAYING') {
+                if (time - lastRaycastTime > 66) {
+                    lastRaycastTime = time; raycaster.setFromCamera(new THREE.Vector2(0, 0), camera); const intersects = raycaster.intersectObjects(objects, true); 
+                    if (intersects.length > 0 && intersects[0].object.visible !== false) { 
+                        let targetObj = intersects[0].object; if (targetObj.parent && targetObj.parent.type === 'Group') targetObj = targetObj.parent;
+                        outlineMesh.position.set(Math.round(targetObj.position.x), Math.round(targetObj.position.y), Math.round(targetObj.position.z)); outlineMesh.visible = true; 
+                    } else outlineMesh.visible = false;
+                }
+                
+                velocity.x -= velocity.x * 10.0 * delta; velocity.z -= velocity.z * 10.0 * delta;
+                if (!flyMode) velocity.y -= GRAVITY * delta; else velocity.y -= velocity.y * 5.0 * delta; 
+                const dirX = Number(moveRight) - Number(moveLeft); const dirZ = Number(moveForward) - Number(moveBackward); const dirLen = Math.sqrt(dirX * dirX + dirZ * dirZ);
+                if (dirLen > 0) { velocity.x -= (dirX / dirLen) * SPEED * delta; velocity.z -= (dirZ / dirLen) * SPEED * delta; }
+                
+                const player = controls.getObject();
+                
+                let nextX = player.position.x + (tempRightVec.set(1,0,0).applyQuaternion(player.quaternion).setY(0).normalize().x * -velocity.x + tempForwardVec.set(0,0,-1).applyQuaternion(player.quaternion).setY(0).normalize().x * -velocity.z) * delta;
+                let nextY = player.position.y + velocity.y * delta;
+                let nextZ = player.position.z + (tempRightVec.z * -velocity.x + tempForwardVec.z * -velocity.z) * delta;
+
+                if (checkCollision(player.position.x, nextY, player.position.z)) { if (velocity.y < 0) canJump = true; velocity.y = 0; nextY = player.position.y; } else canJump = false; 
+                if (checkCollision(nextX, nextY, player.position.z)) nextX = player.position.x; 
+                if (checkCollision(nextX, nextY, nextZ)) nextZ = player.position.z; 
+
+                player.position.set(nextX, nextY, nextZ);
+                
+                // ⚠️ Nếu Cậu chủ bằng cách nào đó "lọt rào" và rớt xuống dưới -21, sẽ bị dịch chuyển lên lại bờ ⚠️
+                if (player.position.y < -21) { velocity.y = 0; player.position.set(0, 15, 0); }
+                renderer.render(scene, camera);
+            } else renderer.render(scene, camera);
+            prevTime = time;
+        }
+        
+        setupUIEvents();
+    </script>
+</body>
+</html>
