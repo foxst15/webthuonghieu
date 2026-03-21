@@ -2,13 +2,14 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Fox Craft V8.0 - Vanilla Limits & Settings 🦊🎀</title>
 
     <!-- ========================================================================================== -->
     <!-- 🟨🟨🟨 PHẦN CSS: GIAO DIỆN VÀ STYLE 🟨🟨🟨 -->
     <!-- ========================================================================================== -->
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; background: #000; }
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; background: #000; touch-action: none; }
         
         #crosshair {
             position: absolute; top: 50%; left: 50%; width: 20px; height: 20px;
@@ -140,6 +141,34 @@
             text-shadow: 1px 1px 0 #000;
         }
         .mob-btn:active { background: rgba(255,255,255,0.5); transform: scale(0.9); }
+
+        /* 📱 RESPONSIVE TỐI ƯU GIAO DIỆN MOBILE 📱 */
+        @media (max-width: 768px) {
+            .mc-title { font-size: 38px !important; text-shadow: 2px 2px 0 #000, 0px 2px 0 #000, 2px 0px 0 #000, -1px -1px 0 #fff !important; }
+            .mc-subtitle { font-size: 12px !important; letter-spacing: 2px !important; }
+            .mc-splash { right: -20px !important; font-size: 16px !important; }
+            .mc-logo-container { margin-bottom: 20px !important; }
+            
+            .mc-board { width: 90vw !important; padding: 15px !important; box-sizing: border-box; }
+            .mc-btn { width: 80vw !important; max-width: 280px !important; font-size: 14px !important; padding: 8px !important; }
+            .mc-input { width: 80vw !important; max-width: 280px !important; box-sizing: border-box; }
+            .mc-slider-container { width: 80vw !important; max-width: 280px !important; }
+            
+            .settings-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+            
+            #inventory { width: 95vw !important; padding: 10px !important; box-sizing: border-box; max-height: 90vh !important; }
+            #inv-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 6px !important; }
+            
+            .slot { width: 38px !important; height: 38px !important; font-size: 18px !important; }
+            .slot-img { width: 24px !important; height: 24px !important; }
+            #hotbar { padding: 3px !important; gap: 3px !important; }
+            
+            .character-preview { display: none !important; } /* Ẩn nhân vật 3D trên điện thoại cho gọn */
+            
+            /* Thu gọn nút Mobile để không che khuất màn hình chơi */
+            #mobile-ui .mob-btn { width: 45px !important; height: 45px !important; font-size: 14px !important; }
+            #btn-jump { width: 45px !important; height: 45px !important; }
+        }
     </style>
 </head>
 <body>
@@ -191,7 +220,7 @@
     </div>
 
     <div id="inventory">
-        <h2>🎒 Túi đồ của <span id="inv-player-name"></span> 🎀</h2>
+        <h2>🎒 Túi đồ của <span id="inv-player-name"> bạn </span> 🎀</h2>
         <div id="inv-grid"></div>
         <p style="color: #aaa; font-size: 12px; margin-top: 15px;">Click để trang bị. Nhấn E hoặc ESC để thoát.</p>
     </div>
@@ -337,10 +366,10 @@
         <div class="mc-label" style="font-size: 40px; margin-bottom: 20px;">Về Trò Chơi</div>
         <div class="mc-board" style="text-align: center; padding: 30px;">
             <h3 style="color: #00FFFF; text-shadow: 2px 2px 0 #000; margin-top: 0; font-size: 24px;">🦊 FOX CRAFT V8.0 🎀</h3>
-            <p>game giải trí ,máy của bạn có đủ chơi dc ko .</p>
-            <p>nếu ko chơi mượt đập mẹ nó máy đi!</p>
+            <p>game giải trí cực cao , nếu máy bạn ko mạnh thì hãy chơi nó.</p>
+            <p>game ko dành cho máy mạnh !</p>
             <p style="color: #FFD700; font-weight: bold; font-size: 18px; margin: 15px 0;">Nhà phát triển: FoxST</p>
-            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 15px 30px; font-size: 18px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 DONATE PLS!! 🧧</div>
+            <div class="mc-btn" id="btn-donate" style="width: auto; padding: 15px 30px; font-size: 18px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 DONATE ĐỂ CÓ SP TỐT HƠN!! 🧧</div>
         </div>
         <div class="mc-btn" id="btn-about-back">Quay lại</div>
     </div>
