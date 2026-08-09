@@ -57,7 +57,9 @@
     <script type="module">
         import * as THREE from 'three';
         import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
-        import { FoxCraftBlockLoader } from './FoxCraftBlockLoader.js';
+        
+        // 🎀 BÉ LÔI FIX ĐƯỜNG DẪN TRỎ ĐÚNG VÀO THƯ MỤC FoxCraft_Engine_1.21.8
+        import { FoxCraftBlockLoader } from './FoxCraft_Engine_1.21.8/FoxCraftBlockLoader.js';
 
         let scene, camera, renderer, controls, raycaster, blockLoader;
         let objects = [], worldMap = new Map();
@@ -69,9 +71,9 @@
             scene.background = new THREE.Color(0x87CEEB);
             camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             
-            // 🎀 Khởi tạo Loader Java 1.21.8 của Bé Lôi
+            // 🎀 BÉ LÔI FIX ĐƯỜNG DẪN NẠP DATABASE TRONG FoxCraft_Engine_1.21.8
             blockLoader = new FoxCraftBlockLoader(scene, {
-                basePath: './assets/minecraft-1.21.8'
+                basePath: './FoxCraft_Engine_1.21.8/assets/minecraft-1.21.8'
             });
 
             await blockLoader.loadDatabase();
