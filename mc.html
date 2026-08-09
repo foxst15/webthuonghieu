@@ -3,121 +3,268 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Fox Craft V9.0 - Java 1.21.8 Engine 🦊🎀</title>
+    <title>Fox Craft V9.0 - Java 1.21.8 Full Engine 🦊🎀</title>
 
     <style>
-        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; background: #000; touch-action: none; }
+        /* ========================================================================================== */
+        /* 🟨🟨🟨 PHẦN CSS: GIAO DIỆN VÀ STYLE FULL V9.0 🟨🟨🟨 */
+        /* ========================================================================================== */
+        body { margin: 0; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; user-select: none; -webkit-user-select: none; background: #000; touch-action: none; }
+        
         #crosshair { position: absolute; top: 50%; left: 50%; width: 20px; height: 20px; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20"><path d="M10 0v20M0 10h20" stroke="white" stroke-width="2" style="filter:drop-shadow(1px 1px 1px black);"/></svg>'); transform: translate(-50%, -50%); pointer-events: none; z-index: 10; display: none; }
+        
         #hud { position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); display: none; gap: 20px; z-index: 5; }
         .bar { width: 200px; height: 15px; background: #333; border: 2px solid white; position: relative; }
         .bar-fill { height: 100%; width: 100%; transition: width 0.2s; }
         #health .bar-fill { background: #ff3333; } 
         #hunger .bar-fill { background: #ff9900; } 
         .icon { position: absolute; left: -25px; top: -5px; font-size: 20px; }
+
         #hotbar { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); padding: 5px; border-radius: 5px; display: none; gap: 5px; border: 2px solid #555; z-index: 15; }
         .slot { width: 45px; height: 45px; background: rgba(255, 255, 255, 0.1); border: 2px solid #888; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 24px; cursor: pointer; position: relative; transition: transform 0.1s; }
         .slot.active { border-color: #00FFFF; background: rgba(255, 255, 255, 0.4); transform: scale(1.15); box-shadow: 0 0 15px #00FFFF; z-index: 20; }
         .slot-img { width: 32px; height: 32px; image-rendering: pixelated; pointer-events: none; object-fit: cover; position: absolute; }
         .slot-num { position:absolute; top:2px; left:2px; font-size:10px; text-shadow:1px 1px 0 #000; color: white; font-family: monospace; }
+
         #fps { position: absolute; top: 5px; left: 5px; color: #00FF00; font-weight: bold; text-shadow: 1px 1px 0 #000; z-index: 10; font-size: 18px; display: none; }
+        
         #loading-overlay { position: absolute; top:0; left:0; width:100%; height:100%; background: #000; z-index: 200; display: flex; flex-direction: column; align-items:center; justify-content:center; color:#00FFFF; font-size:24px; animation: blink 1s infinite; }
         @keyframes blink { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
+
         #start-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; cursor: pointer; }
         .start-text { font-size: 30px; font-weight: bold; color: #ff69b4; text-shadow: 2px 2px 0px #fff; animation: pulse-start 1s infinite alternate; text-align: center; padding: 20px;}
         @keyframes pulse-start { 0% { transform: scale(1); } 100% { transform: scale(1.05); } }
+
         .menu-panel { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: none; flex-direction: column; background: rgba(0,0,0,0.4); justify-content: center; align-items: center; z-index: 100; backdrop-filter: blur(2px); }
+        body.high-contrast .menu-panel { background: rgba(0,0,0,0.9); backdrop-filter: none; }
+        body.high-contrast .mc-btn { background: #000; color: #fff; border-color: #fff; }
+        body.high-contrast .mc-label { color: #fff; text-shadow: none; }
+
+        #pause-menu { background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); }
+
+        .mc-logo-container { position: relative; margin-bottom: 40px; text-align: center; }
         .mc-title { font-size: 60px; font-weight: 900; color: #a8a8a8; text-shadow: 4px 4px 0 #000, 0px 4px 0 #000, 4px 0px 0 #000, -2px -2px 0 #fff; font-family: 'Arial Black', Impact, sans-serif; letter-spacing: 2px; line-height: 1; }
+        .mc-subtitle { font-size: 18px; color: #fff; text-shadow: 2px 2px 0 #000; letter-spacing: 6px; font-weight: bold; margin-top: 5px; }
+        .mc-splash { position: absolute; right: -60px; bottom: -20px; color: #ffff00; font-size: 24px; font-weight: 900; font-family: 'Arial Black', Impact, sans-serif; text-shadow: 2px 2px 0 #3f3f00; transform: rotate(-20deg); animation: mc-splash-bounce 0.4s ease-in-out infinite alternate; white-space: nowrap; z-index: 10; }
+        @keyframes mc-splash-bounce { 0% { transform: rotate(-20deg) scale(0.95); } 100% { transform: rotate(-20deg) scale(1.15); } }
+        
         .mc-btn { background: #c6c6c6; border: 2px solid #111; border-top-color: #fefefe; border-left-color: #fefefe; border-bottom-color: #555; border-right-color: #555; color: #333; font-weight: bold; font-size: 16px; padding: 10px 15px; cursor: pointer; width: 250px; text-align: center; user-select: none; box-shadow: inset -2px -2px 0px rgba(0,0,0,0.25); margin-bottom: 10px; font-family: 'Courier New', Courier, monospace; }
+        .mc-btn:active { border-top-color: #555; border-left-color: #555; border-bottom-color: #fefefe; border-right-color: #fefefe; background: #a6a6a6; box-shadow: inset 2px 2px 0px rgba(0,0,0,0.25); }
+        .mc-btn:hover { background: #d0d0d0; }
+
+        .mc-input { background: rgba(0,0,0,0.6); color: white; border: 2px solid #555; border-top-color: #111; border-left-color: #111; padding: 10px; font-size: 16px; font-family: monospace; width: 270px; margin-bottom: 20px; outline: none; text-align: center; }
+        .mc-input:focus { border-color: #00FFFF; }
+        .mc-label { color: white; text-shadow: 2px 2px 0 #000; font-weight: bold; margin-bottom: 5px; font-size: 16px; text-align: center;}
+        
+        .mc-slider-container { display: flex; flex-direction: column; align-items: center; margin-bottom: 15px; width: 200px;}
+        .mc-slider { width: 100%; cursor: pointer; }
+        .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; align-items: center; justify-items: center;}
+
+        .character-preview { position: absolute; right: 10%; top: 50%; transform: translateY(-50%); display: flex; flex-direction: column; align-items: center; }
+        .character-name { background: rgba(0,0,0,0.5); color: white; padding: 2px 8px; margin-bottom: 5px; border-radius: 4px; font-family: sans-serif; font-size: 14px; font-weight: bold; }
+        .character-img { height: 200px; image-rendering: pixelated; filter: drop-shadow(5px 5px 0px rgba(0,0,0,0.5)); margin-bottom: 10px;}
+
+        .mc-board { background: rgba(0,0,0,0.7); border: 4px solid #555; padding: 20px; width: 450px; max-height: 350px; overflow-y: auto; color: white; margin-bottom: 20px;}
+        .achiev-item { display: flex; align-items: center; background: rgba(255,255,255,0.1); padding: 10px; margin-bottom: 10px; border: 2px solid #444; }
+        .achiev-icon { font-size: 30px; margin-right: 15px; }
+        .achiev-title { font-weight: bold; color: #FFD700; font-size: 18px; text-shadow: 1px 1px 0 #000;}
+        .achiev-desc { font-size: 14px; color: #ccc; }
+
         #inventory { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 580px; background: rgba(30, 30, 30, 0.95); border: 4px solid #555; border-radius: 10px; padding: 20px; display: none; z-index: 50; flex-direction: column; align-items: center; box-shadow: 0 0 30px rgba(0,0,0,0.8); max-height: 85vh; overflow-y: auto; }
+        #inventory::-webkit-scrollbar { width: 8px; } #inventory::-webkit-scrollbar-thumb { background: #888; border-radius: 4px; }
+        #inventory h2 { color: white; margin-top: 0; text-shadow: 2px 2px 0 #000; }
         #inv-grid { display: grid; grid-template-columns: repeat(9, 1fr); gap: 8px; width: 100%; justify-items: center; }
-        .inv-item { width: 48px; height: 48px; background: rgba(255,255,255,0.1); border: 2px solid #777; display: flex; justify-content: center; align-items: center; cursor: pointer; position: relative; font-size: 24px; color: white;}
+        
+        .inv-item { width: 48px; height: 48px; background: rgba(255,255,255,0.1); border: 2px solid #777; display: flex; justify-content: center; align-items: center; cursor: pointer; transition: background 0.2s, border-color 0.2s; position: relative; overflow: visible; font-size: 24px; color: white;}
         .inv-item:hover { background: rgba(255,255,255,0.3); border-color: white; }
-        .inv-item .tooltip { position: absolute; bottom: -30px; background: rgba(0,0,0,0.85); color: white; padding: 4px 8px; border: 1px solid #aaa; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; pointer-events: none; display: none; z-index: 100; text-shadow: 1px 1px 0 #000; }
+        .inv-item .tooltip { position: absolute; bottom: -30px; background: rgba(0,0,0,0.85); color: white; padding: 4px 8px; border: 1px solid #aaa; border-radius: 4px; font-size: 12px; font-weight: bold; white-space: nowrap; pointer-events: none; display: none; z-index: 100; text-shadow: 1px 1px 0 #000; box-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
         .inv-item:hover .tooltip { display: block; }
+        
         #btn-close-inv { position: absolute; top: 10px; right: 10px; background: #ff3333; color: white; width: 30px; height: 30px; border-radius: 5px; text-align: center; line-height: 30px; font-weight: bold; cursor: pointer; border: 2px solid #aa0000; z-index: 60; }
+        
+        #achievement-toast { position: absolute; top: 20px; right: -400px; width: 320px; background: rgba(30, 30, 30, 0.9); border: 3px solid #555; border-radius: 8px; padding: 10px 15px; display: flex; align-items: center; color: white; z-index: 1000; transition: right 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); box-shadow: 0 0 15px rgba(0,0,0,0.8); pointer-events: none; }
+        #achievement-toast.show { right: 20px; } 
+        .toast-icon { font-size: 36px; margin-right: 15px; text-shadow: 2px 2px 0px #000; }
+        .toast-content { display: flex; flex-direction: column; }
+        .toast-title { color: #ffff00; font-weight: bold; font-size: 14px; margin-bottom: 3px; text-shadow: 1px 1px 0px #000; }
+        .toast-desc { font-size: 16px; font-weight: bold; text-shadow: 1px 1px 0px #000; }
+
+        #mobile-ui { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 10; display: none; }
+        .mob-btn { position: absolute; pointer-events: auto; background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5); border-radius: 50%; display: flex; justify-content: center; align-items: center; color: white; font-weight: bold; font-size: 16px; user-select: none; width: 50px; height: 50px; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); text-shadow: 1px 1px 0 #000; }
+        .mob-btn:active { background: rgba(255,255,255,0.5); transform: scale(0.9); }
+
+        @media (max-width: 768px) {
+            .mc-title { font-size: 38px !important; text-shadow: 2px 2px 0 #000, 0px 2px 0 #000, 2px 0px 0 #000, -1px -1px 0 #fff !important; }
+            .mc-subtitle { font-size: 12px !important; letter-spacing: 2px !important; }
+            .mc-splash { right: -20px !important; font-size: 16px !important; }
+            .mc-logo-container { margin-bottom: 20px !important; }
+            .mc-board { width: 90vw !important; padding: 15px !important; box-sizing: border-box; }
+            .mc-btn { width: 80vw !important; max-width: 280px !important; font-size: 14px !important; padding: 8px !important; }
+            .mc-input { width: 80vw !important; max-width: 280px !important; box-sizing: border-box; }
+            .mc-slider-container { width: 80vw !important; max-width: 280px !important; }
+            .settings-grid { grid-template-columns: 1fr !important; gap: 10px !important; }
+            #inventory { width: 95vw !important; padding: 15px !important; box-sizing: border-box; max-height: 90vh !important; }
+            #inv-grid { grid-template-columns: repeat(5, 1fr) !important; gap: 8px !important; }
+            .slot { width: 38px !important; height: 38px !important; font-size: 18px !important; }
+            .slot-img { width: 24px !important; height: 24px !important; }
+            #hotbar { padding: 3px !important; gap: 3px !important; }
+            .character-preview { display: none !important; } 
+            #mobile-ui .mob-btn { width: 45px !important; height: 45px !important; font-size: 14px !important; }
+            #btn-jump { width: 45px !important; height: 45px !important; }
+        }
     </style>
 </head>
 <body>
 
-    <div id="start-overlay"><div class="start-text">🐾 CHẠM ĐỂ CHƠI 🐾</div><p style="color:#aaa; margin-top:10px;">(Tải Engine Java 1.21.8...)</p></div>
+    <div id="start-overlay"><div class="start-text">🐾 CHẠM ĐỂ CHƠI 🐾</div><p style="color:#aaa; margin-top:10px;">(Tải Engine & Audio nha!)</p></div>
     <div id="loading-overlay" style="display:none;">...FOXCRAFT 1.21.8...</div>
+    <div id="achievement-toast"><div class="toast-icon" id="toast-icon">🏆</div><div class="toast-content"><div class="toast-title">Achievement Get!</div><div class="toast-desc" id="toast-desc">Thành tựu mới</div></div></div>
 
     <div id="crosshair"></div><div id="fps">FPS: 0</div>
-    <div id="hud"><div id="health" class="bar"><span class="icon">❤️</span><div class="bar-fill" id="health-fill" style="width: 100%;"></div></div></div>
+    <div id="hud"><div id="health" class="bar"><span class="icon">❤️</span><div class="bar-fill" id="health-fill" style="width: 100%;"></div></div><div id="hunger" class="bar"><span class="icon">🍗</span><div class="bar-fill" id="hunger-fill" style="width: 90%;"></div></div></div>
     <div id="hotbar"></div>
+    
+    <div id="mobile-ui">
+        <div id="btn-mobile-pause" class="mob-btn" style="top: 10px; right: 10px; width: 40px; height: 40px; font-size: 20px; border-radius: 10px; background: rgba(0,0,0,0.5);">⏸</div>
+        <div style="position: absolute; bottom: 20px; left: 20px; width: 150px; height: 150px;"><div id="btn-up" class="mob-btn" style="top: 0; left: 50px;">W</div><div id="btn-down" class="mob-btn" style="bottom: 0; left: 50px;">S</div><div id="btn-left" class="mob-btn" style="top: 50px; left: 0;">A</div><div id="btn-right" class="mob-btn" style="top: 50px; right: 0;">D</div><div id="btn-fly" class="mob-btn" style="top: 50px; left: 50px; width:46px; height:46px; font-size: 12px; background: rgba(0,255,255,0.2);">Fly</div></div>
+        <div style="position: absolute; bottom: 20px; right: 20px; width: 150px; height: 150px;"><div id="btn-place" class="mob-btn" style="top: 0; left: 50px; background: rgba(0,255,0,0.3);">Đặt</div><div id="btn-jump" class="mob-btn" style="bottom: 0; left: 50px; width: 50px; height: 50px; border-radius: 10px;">Nhảy</div><div id="btn-break" class="mob-btn" style="top: 50px; left: 0; background: rgba(255,0,0,0.3);">Đập</div><div id="btn-inv" class="mob-btn" style="top: 50px; right: 0;">Túi</div></div>
+    </div>
 
-    <div id="inventory"><div id="btn-close-inv">X</div><h2>🎒 Túi đồ Java 1.21.8 🎀</h2><div id="inv-grid"></div></div>
+    <div id="inventory"><div id="btn-close-inv">X</div><h2>🎒 Túi đồ của <span id="inv-player-name"> bạn </span> 🎀</h2><div id="inv-grid"></div><p style="color: #aaa; font-size: 12px; margin-top: 15px;">Click để trang bị. Nhấn E hoặc nút X để thoát.</p></div>
 
     <div id="main-menu" class="menu-panel">
-        <div style="text-align: center; margin-bottom: 30px;"><div class="mc-title">FOXCRAFT</div><div style="color:#fff; letter-spacing: 4px; font-weight: bold;">JAVA 1.21.8 ENGINE</div></div>
-        <div class="mc-btn" id="btn-create-world">Tạo & Chơi!</div>
+        <div class="mc-logo-container"><div class="mc-title">FOXCRAFT</div><div class="mc-subtitle">V9.0 JAVA 1.21.8 ENGINE</div><div class="mc-splash">New Mobs!</div></div>
+        <div class="mc-btn" id="btn-goto-play">Play</div><div class="mc-btn" id="btn-goto-achievements">Achievements</div><div class="mc-btn" id="btn-goto-options">Options</div><div class="mc-btn" id="btn-goto-about">About</div>
+        <div class="character-preview"><div class="character-name" id="display-player-name">Goshujin-sama</div><img src="https://minotar.net/armor/body/Steve/200.png" alt="Steve" class="character-img"><input type="text" id="input-player-name" class="mc-input" style="width: 120px; margin-bottom:0; padding: 5px;" value="Goshujin-sama" placeholder="Tên của bạn"></div>
+        <div style="position: absolute; bottom: 10px; right: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">v9.0 Java 1.21.8</div><div style="position: absolute; bottom: 10px; left: 10px; color: white; text-shadow: 1px 1px 0 #000; font-size: 12px;">Foxst AB</div>
     </div>
+
+    <div id="play-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Tạo Thế Giới Mới</div><input type="range" id="slider-world-size" class="mc-slider" min="1" max="3" value="2" step="1"><div class="mc-label" style="margin-bottom:20px;">Kích Cỡ Map: <span id="label-world-size" style="color: #ffff00;">Bình Thường (64x64)</span></div><div class="mc-btn" id="btn-create-world">Tạo & Chơi!</div><div class="mc-btn" id="btn-play-back">Quay lại</div></div>
+    <div id="options-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 30px; text-shadow: 3px 3px 0 #000;">Options</div><div class="settings-grid"><div class="mc-btn" id="btn-goto-video">Video Settings...</div><div class="mc-btn" id="btn-goto-audio">Audio Settings...</div><div class="mc-btn" id="btn-goto-controls">Controls...</div><div class="mc-btn" id="btn-goto-access">Accessibility...</div></div><div class="mc-btn" id="btn-options-back">Xong</div></div>
+    <div id="video-settings-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 20px;">Video Settings</div><div class="settings-grid"><div class="mc-btn" id="btn-opt-graphics">Graphics: Fancy</div><div class="mc-slider-container"><div class="mc-label" id="label-render-dist">Render Distance: 100</div><input type="range" id="slider-render-dist" class="mc-slider" min="30" max="250" value="100" step="10"></div><div class="mc-btn" id="btn-opt-smooth">Smooth Lighting: ON</div><div class="mc-btn" id="btn-opt-vsync">V-Sync: ON</div><div class="mc-btn" id="btn-opt-particles">Particles: All</div><div class="mc-btn" id="btn-opt-shadows">Entity Shadows: ON</div><div class="mc-btn" id="btn-opt-fullscreen" style="grid-column: span 2; width: 90%; max-width: 415px;">Fullscreen: OFF</div></div><div class="mc-btn" id="btn-video-back">Quay lại</div></div>
+    <div id="audio-settings-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 20px;">Audio Settings</div><div class="settings-grid"><div class="mc-slider-container"><div class="mc-label" id="label-vol-master">Master: 100%</div><input type="range" id="slider-vol-master" class="mc-slider" min="0" max="100" value="100"></div><div class="mc-slider-container"><div class="mc-label" id="label-vol-music">Music: 50%</div><input type="range" id="slider-vol-music" class="mc-slider" min="0" max="100" value="50"></div><div class="mc-slider-container"><div class="mc-label" id="label-vol-effects">Effects: 100%</div><input type="range" id="slider-vol-effects" class="mc-slider" min="0" max="100" value="100"></div><div class="mc-slider-container"><div class="mc-label" id="label-vol-ambient">Environment: 100%</div><input type="range" id="slider-vol-ambient" class="mc-slider" min="0" max="100" value="100"></div><div class="mc-slider-container"><div class="mc-label" id="label-vol-mobs">Mob Voices: 100%</div><input type="range" id="slider-vol-mobs" class="mc-slider" min="0" max="100" value="100"></div><div class="mc-slider-container"><div class="mc-label" id="label-vol-blocks">Blocks: 100%</div><input type="range" id="slider-vol-blocks" class="mc-slider" min="0" max="100" value="100"></div></div><div class="mc-btn" id="btn-audio-back">Quay lại</div></div>
+    <div id="controls-settings-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Controls</div><div class="settings-grid" style="grid-template-columns: 1fr; gap: 20px;"><div class="mc-slider-container" style="width: 300px; max-width: 80vw;"><div class="mc-label" id="label-mouse-sens">Mouse Sensitivity: 100%</div><input type="range" id="slider-mouse-sens" class="mc-slider" min="10" max="200" value="100"></div><div class="mc-btn" id="btn-opt-invert">Invert Mouse: OFF</div><div class="mc-btn" id="btn-opt-keybinds" style="color: #888;">Keybinds... (Coming Soon)</div></div><div class="mc-btn" id="btn-controls-back">Quay lại</div></div>
+    <div id="accessibility-settings-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 30px;">Language & Accessibility</div><div class="settings-grid" style="grid-template-columns: 1fr; gap: 20px;"><div class="mc-btn" id="btn-opt-lang">Language: Tiếng Việt</div><div class="mc-btn" id="btn-opt-chat">Chat Settings: Normal</div><div class="mc-btn" id="btn-opt-contrast">High Contrast: OFF</div></div><div class="mc-btn" id="btn-access-back">Quay lại</div></div>
+    <div id="achievements-menu" class="menu-panel"><div class="mc-label" style="font-size: 30px; margin-bottom: 20px;">Thành Tựu</div><div class="mc-board"><div class="achiev-item"><div class="achiev-icon">🌲</div><div><div class="achiev-title">Getting Wood</div><div class="achiev-desc">Đập một khối gỗ.</div></div></div><div class="achiev-item"><div class="achiev-icon">💎</div><div><div class="achiev-title">Time to Mine!</div><div class="achiev-desc">Đào được Kim Cương.</div></div></div><div class="achiev-item"><div class="achiev-icon">📞</div><div><div class="achiev-title">Alo Vũ hả em?</div><div class="achiev-desc">Gặp gỡ Tộc Trưởng Độ Mixi.</div></div></div><div class="achiev-item"><div class="achiev-icon">📞</div><div><div class="achiev-title">Alo bã mía cao bằng?</div><div class="achiev-desc">Đặt khối Meme Lỗi.</div></div></div><div class="achiev-item"><div class="achiev-icon">🐶</div><div><div class="achiev-title">What the dog doin?</div><div class="achiev-desc">Triệu hồi chó Doin huyền thoại.</div></div></div><div class="achiev-item"><div class="achiev-icon">⭐</div><div><div class="achiev-title">Chạm tới các vì sao</div><div class="achiev-desc">Xây đến giới hạn Y = +180.</div></div></div><div class="achiev-item"><div class="achiev-icon">🎀</div><div><div class="achiev-title">HELLO WORLD</div><div class="achiev-desc">Bắt đầu trò chơi lần đầu tiên.</div></div></div></div><div class="mc-btn" id="btn-achiev-back">Quay lại</div></div>
+    <div id="about-menu" class="menu-panel"><div class="mc-label" style="font-size: 40px; margin-bottom: 20px;">Về Trò Chơi</div><div class="mc-board" style="text-align: center; padding: 20px;"><h3 style="color: #00FFFF; text-shadow: 2px 2px 0 #000; margin-top: 0; font-size: 24px;">🦊 FOX CRAFT V9.0 🎀</h3><p>Đa quần xã, Hang động và Động vật 3D!</p><p style="color: #FFD700; font-weight: bold; font-size: 18px; margin: 15px 0;">Nhà phát triển: FoxST</p><div class="mc-btn" id="btn-donate" style="width: auto; padding: 10px 20px; font-size: 16px; color: #fff; background: linear-gradient(45deg, #ff0055, #ff69b4);">🧧 DONATE ĐỂ CÓ SP TỐT HƠN!!! 🧧</div></div><div class="mc-btn" id="btn-about-back">Quay lại</div></div>
+    <div id="pause-menu" class="menu-panel"><div class="mc-label" style="font-size: 40px; margin-bottom: 30px;">Trò Chơi Tạm Dừng</div><div class="mc-btn" id="btn-resume">Quay Lại Trò Chơi</div><div class="mc-btn" id="btn-pause-options">Cài Đặt Options</div><div class="mc-btn" id="btn-quit" style="margin-top: 20px;">Lưu & Thoát Ra Menu</div></div>
 
     <script type="importmap"> { "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js", "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/" } } </script>
     <script type="module">
         import * as THREE from 'three';
         import { PointerLockControls } from 'three/addons/controls/PointerLockControls.js';
         
-        // 🎀 BÉ LÔI FIX ĐƯỜNG DẪN TRỎ ĐÚNG VÀO THƯ MỤC FoxCraft_Engine_1.21.8
+        // 🎀 BÉ LÔI KẾT NỐI MODULE LOADER JAVA 1.21.8
         import { FoxCraftBlockLoader } from './FoxCraft_Engine_1.21.8/FoxCraftBlockLoader.js';
 
-        let scene, camera, renderer, controls, raycaster, blockLoader;
-        let objects = [], worldMap = new Map();
-        let hotbarSlots = [1, 2, 3, 4, 1050, 1052, 1058]; 
-        let currentHotbarIndex = 0, isInventoryOpen = false;
+        let WORLD_SIZE = 64; 
+        const GRAVITY = 30.0; const JUMP_FORCE = 10.0; const SPEED = 60.0;
+        const globalBoxGeo = new THREE.BoxGeometry(1, 1, 1);
+        const globalParticleGeo = new THREE.BoxGeometry(0.2, 0.2, 0.2);
+        let camera, menuCamera, scene, renderer, controls, raycaster, blockLoader;
+        let objects = [], worldMap = new Map(), entities = [];
+        
+        let moveForward = false, moveBackward = false, moveLeft = false, moveRight = false, canJump = false, flyMode = false;
+        let prevTime = performance.now(), velocity = new THREE.Vector3(), outlineMesh; 
+        const tempRightVec = new THREE.Vector3(), tempForwardVec = new THREE.Vector3(); 
+        
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || ('ontouchstart' in window && navigator.maxTouchPoints > 0);
+        let lookTouchId = null; let lastLookX = 0, lastLookY = 0;
+        
+        let gameState = 'START', previousMenu = 'MENU', isInventoryOpen = false;
+        let frames = 0, lastFpsTime = performance.now(), lastRaycastTime = 0; 
+        let mixiSound, dogSound, bgmSound, achievSound;
+        let dayTime = 0, sun, moon, cloudGroup, ambLight, dirLight;
 
-        async function initEngine() {
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x87CEEB);
-            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            
-            // 🎀 BÉ LÔI FIX ĐƯỜNG DẪN NẠP DATABASE TRONG FoxCraft_Engine_1.21.8
-            blockLoader = new FoxCraftBlockLoader(scene, {
-                basePath: './FoxCraft_Engine_1.21.8/assets/minecraft-1.21.8'
-            });
+        let RENDER_DISTANCE = 100;
+        let gfxFancy = true, smoothLighting = true, vsyncEnabled = true, particleLevel = 2, entityShadows = true;
+        let particles = []; let playerHealth = 100;
+        let volMaster = 1.0, volMusic = 0.5, volEffects = 1.0, volAmbient = 1.0, volMobs = 1.0, volBlocks = 1.0;
+        let mouseSensitivity = 1.0, invertMouse = false;
+        let langVi = true, chatSize = 1, highContrast = false;
 
-            await blockLoader.loadDatabase();
+        let hotbarSlots = ['minecraft:grass_block', 'minecraft:dirt', 'minecraft:stone', 'minecraft:oak_log', 'minecraft:oak_leaves', 'minecraft:dripstone_block', 'minecraft:amethyst_block', 'minecraft:cherry_planks']; 
+        let currentHotbarIndex = 0;
 
-            const ambLight = new THREE.AmbientLight(0xffffff, 0.8);
-            scene.add(ambLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            dirLight.position.set(20, 40, 20);
-            scene.add(dirLight);
+        const ACHIEVEMENTS_DATA = { 'wood': { title: 'Getting Wood', icon: '🌲' }, 'diamond': { title: 'Time to Mine!', icon: '💎' }, 'mixi': { title: 'Alo Vũ hả em?', icon: '📞' }, 'dog': { title: 'What the dog doin?', icon: '🐶' }, 'play': { title: 'HELLO WORLD', icon: '🎀' }, 'build_limit': { title: 'Chạm tới các vì sao', icon: '⭐' } };
+        let unlockedAchievs = {}; let achievTimeout;
 
-            controls = new PointerLockControls(camera, document.body);
-            scene.add(controls.getObject());
+        function triggerAchievement(id) { if (unlockedAchievs[id] || !ACHIEVEMENTS_DATA[id]) return; unlockedAchievs[id] = true; const data = ACHIEVEMENTS_DATA[id]; document.getElementById('toast-icon').innerText = data.icon; document.getElementById('toast-desc').innerText = data.title; const toast = document.getElementById('achievement-toast'); toast.classList.add('show'); if (achievSound) { achievSound.currentTime = 0; achievSound.volume = volMaster * volEffects; achievSound.play().catch(e=>console.warn(e)); } if(achievTimeout) clearTimeout(achievTimeout); achievTimeout = setTimeout(() => { toast.classList.remove('show'); }, 4000); }
+        function updateAudioVolumes() { if (bgmSound) bgmSound.volume = volMaster * volMusic; if (mixiSound) mixiSound.volume = volMaster * volMobs; if (dogSound) dogSound.volume = volMaster * volMobs; }
 
-            raycaster = new THREE.Raycaster();
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            document.body.appendChild(renderer.domElement);
-
-            renderHotbar();
-            renderInventory();
-            generateWorld();
-
-            document.getElementById('loading-overlay').style.display = 'none';
-            document.getElementById('main-menu').style.display = 'flex';
-
-            document.getElementById('btn-create-world').onclick = () => {
-                document.getElementById('main-menu').style.display = 'none';
-                document.getElementById('crosshair').style.display = 'block';
-                document.getElementById('hud').style.display = 'flex';
-                document.getElementById('hotbar').style.display = 'flex';
-                controls.getObject().position.set(0, 5, 0);
-                controls.lock();
-                animate();
-            };
-
-            document.getElementById('start-overlay').onclick = function() { this.style.display = 'none'; };
-            document.getElementById('btn-close-inv').onclick = () => closeInventory();
-            document.addEventListener('keydown', onKeyDown);
-            document.addEventListener('mousedown', onMouseDown);
+        function switchState(newState) {
+            const panels = ['main-menu', 'play-menu', 'options-menu', 'video-settings-menu', 'audio-settings-menu', 'controls-settings-menu', 'accessibility-settings-menu', 'achievements-menu', 'about-menu', 'pause-menu', 'inventory'];
+            panels.forEach(p => document.getElementById(p).style.display = 'none'); document.getElementById('crosshair').style.display = 'none'; document.getElementById('hud').style.display = 'none'; document.getElementById('hotbar').style.display = 'none'; document.getElementById('fps').style.display = 'none'; document.getElementById('mobile-ui').style.display = 'none';
+            gameState = newState; updateAudioVolumes(); 
+            switch(newState) { case 'MENU': document.getElementById('main-menu').style.display = 'flex'; break; case 'PLAY_MENU': document.getElementById('play-menu').style.display = 'flex'; break; case 'OPTIONS_MENU': document.getElementById('options-menu').style.display = 'flex'; break; case 'VIDEO_MENU': document.getElementById('video-settings-menu').style.display = 'flex'; break; case 'AUDIO_MENU': document.getElementById('audio-settings-menu').style.display = 'flex'; break; case 'CONTROLS_MENU': document.getElementById('controls-settings-menu').style.display = 'flex'; break; case 'ACCESS_MENU': document.getElementById('accessibility-settings-menu').style.display = 'flex'; break; case 'ACHIEV_MENU': document.getElementById('achievements-menu').style.display = 'flex'; break; case 'ABOUT_MENU': document.getElementById('about-menu').style.display = 'flex'; break; case 'PAUSED': document.getElementById('pause-menu').style.display = 'flex'; break; case 'INVENTORY': document.getElementById('inventory').style.display = 'flex'; break; case 'PLAYING': document.getElementById('crosshair').style.display = isMobile ? 'none' : 'block'; document.getElementById('hud').style.display = 'flex'; document.getElementById('hotbar').style.display = 'flex'; document.getElementById('fps').style.display = 'block'; if (isMobile) document.getElementById('mobile-ui').style.display = 'block'; break; }
         }
 
+        function setupUIEvents() {
+            document.getElementById('start-overlay').addEventListener('click', function() { this.style.display = 'none'; document.getElementById('loading-overlay').style.display = 'flex'; setTimeout(() => { initEngine(); }, 100); });
+            document.getElementById('btn-goto-play').onclick = () => switchState('PLAY_MENU'); document.getElementById('btn-goto-achievements').onclick = () => switchState('ACHIEV_MENU'); document.getElementById('btn-goto-options').onclick = () => switchState('OPTIONS_MENU'); document.getElementById('btn-goto-about').onclick = () => switchState('ABOUT_MENU'); document.getElementById('btn-play-back').onclick = () => switchState('MENU');
+            document.getElementById('btn-create-world').onclick = () => { clearWorld(); generateWorld(); controls.getObject().position.set(0, 15, 0); switchState('PLAYING'); if (!isMobile) controls.lock(); setTimeout(() => triggerAchievement('play'), 1500); };
+            document.getElementById('btn-options-back').onclick = () => switchState(previousMenu); document.getElementById('btn-achiev-back').onclick = () => switchState('MENU'); document.getElementById('btn-about-back').onclick = () => switchState('MENU');
+            document.getElementById('btn-resume').onclick = () => { switchState('PLAYING'); if (!isMobile) controls.lock(); }; document.getElementById('btn-quit').onclick = () => switchState('MENU');
+            document.getElementById('btn-close-inv').onclick = () => closeInventory(); setupMobileControls();
+        }
+
+        function renderHotbar() {
+            const hotbar = document.getElementById('hotbar'); hotbar.innerHTML = '';
+            hotbarSlots.forEach((blockKey, index) => {
+                const block = blockLoader ? blockLoader.blocksMap.get(blockKey) : null;
+                const div = document.createElement('div'); div.className = index === currentHotbarIndex ? 'slot active' : 'slot';
+                div.innerHTML = `<span class="slot-num">${index+1}</span> 📦`;
+                div.onclick = (e) => { e.stopPropagation(); currentHotbarIndex = index; renderHotbar(); };
+                hotbar.appendChild(div);
+            });
+        }
+
+        function renderInventory() {
+            const grid = document.getElementById('inv-grid'); grid.innerHTML = '';
+            if (!blockLoader) return;
+            blockLoader.blocksMap.forEach((block, key) => {
+                if (typeof key === 'string' && key.startsWith('minecraft:')) {
+                    const div = document.createElement('div'); div.className = 'inv-item';
+                    div.innerHTML = `📦 <div class="tooltip">${block.name}</div>`;
+                    div.onclick = (e) => { e.stopPropagation(); hotbarSlots[currentHotbarIndex] = block.identifier; renderHotbar(); };
+                    grid.appendChild(div);
+                }
+            });
+        }
+
+        function toggleInventory() { isInventoryOpen = !isInventoryOpen; if (isInventoryOpen) { gameState = 'INVENTORY'; if (!isMobile) controls.unlock(); document.getElementById('inventory').style.display = 'flex'; } else { closeInventory(); } }
+        function closeInventory() { isInventoryOpen = false; gameState = 'PLAYING'; document.getElementById('inventory').style.display = 'none'; if (!isMobile) controls.lock(); }
+
+        async function initEngine() {
+            scene = new THREE.Scene(); scene.background = new THREE.Color(0x87CEEB); scene.fog = new THREE.Fog(0x87CEEB, 10, RENDER_DISTANCE); 
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, RENDER_DISTANCE + 20);
+            menuCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, RENDER_DISTANCE + 20); menuCamera.position.set(0, 4.5, 0); 
+
+            // 🎀 NẠP MODULE ENGINE 1.21.8 CHÍNH CHỦ
+            blockLoader = new FoxCraftBlockLoader(scene, { basePath: './FoxCraft_Engine_1.21.8/assets/minecraft-1.21.8' });
+            await blockLoader.loadDatabase();
+
+            ambLight = new THREE.AmbientLight(0xffffff, 0.7); scene.add(ambLight);
+            dirLight = new THREE.DirectionalLight(0xffffff, 0.8); dirLight.castShadow = true; scene.add(dirLight);
+
+            controls = new PointerLockControls(camera, document.body);
+            controls.addEventListener('unlock', () => { if(gameState === 'PLAYING' && !isInventoryOpen && !isMobile) switchState('PAUSED'); }); scene.add(controls.getObject());
+
+            raycaster = new THREE.Raycaster(); raycaster.far = 7;
+            outlineMesh = new THREE.LineSegments(new THREE.EdgesGeometry(globalBoxGeo), new THREE.LineBasicMaterial({ color: 0x000000 })); outlineMesh.visible = false; scene.add(outlineMesh);
+
+            renderer = new THREE.WebGLRenderer({ antialias: false }); renderer.setSize(window.innerWidth, window.innerHeight); document.body.appendChild(renderer.domElement);
+            window.addEventListener('resize', onWindowResize); document.addEventListener('keydown', onKeyDown); document.addEventListener('mousedown', onMouseDown);
+
+            renderHotbar(); renderInventory();
+            document.getElementById('loading-overlay').style.display = 'none'; switchState('MENU'); animate();
+        }
+
+        function clearWorld() { objects.forEach(obj => scene.remove(obj)); objects.length = 0; worldMap.clear(); }
+
         function generateWorld() {
-            for (let x = -8; x <= 8; x++) {
-                for (let z = -8; z <= 8; z++) {
+            for (let x = -16; x < 16; x++) {
+                for (let z = -16; z < 16; z++) {
                     createBlockMesh(x, 0, z, 'minecraft:grass_block');
                     createBlockMesh(x, -1, z, 'minecraft:dirt');
                     createBlockMesh(x, -2, z, 'minecraft:stone');
@@ -126,81 +273,44 @@
         }
 
         function createBlockMesh(x, y, z, identifier) {
-            const key = `${x},${y},${z}`;
+            const rx = Math.round(x), ry = Math.round(y), rz = Math.round(z); const key = `${rx},${ry},${rz}`;
             if (worldMap.has(key)) return;
-            const mesh = blockLoader.createBlockMesh(identifier, new THREE.Vector3(x, y, z));
-            scene.add(mesh);
-            objects.push(mesh);
-            worldMap.set(key, mesh);
+            const mesh = blockLoader.createBlockMesh(identifier, new THREE.Vector3(rx, ry, rz));
+            scene.add(mesh); objects.push(mesh); worldMap.set(key, mesh);
         }
 
-        function renderHotbar() {
-            const hotbar = document.getElementById('hotbar');
-            hotbar.innerHTML = '';
-            hotbarSlots.forEach((id, idx) => {
-                const block = blockLoader.blocksMap.get(id);
-                const div = document.createElement('div');
-                div.className = idx === currentHotbarIndex ? 'slot active' : 'slot';
-                div.innerHTML = `<span class="slot-num">${idx+1}</span>${block ? block.name.slice(0,2) : ''}`;
-                div.onclick = () => { currentHotbarIndex = idx; renderHotbar(); };
-                hotbar.appendChild(div);
-            });
-        }
-
-        function renderInventory() {
-            const grid = document.getElementById('inv-grid');
-            grid.innerHTML = '';
-            blockLoader.blocksMap.forEach((block, key) => {
-                if (typeof key === 'number') {
-                    const div = document.createElement('div');
-                    div.className = 'inv-item';
-                    div.innerHTML = `📦<div class="tooltip">${block.name}</div>`;
-                    div.onclick = () => { hotbarSlots[currentHotbarIndex] = block.id; renderHotbar(); };
-                    grid.appendChild(div);
-                }
-            });
-        }
-
-        function toggleInventory() {
-            isInventoryOpen = !isInventoryOpen;
-            document.getElementById('inventory').style.display = isInventoryOpen ? 'flex' : 'none';
-            if (isInventoryOpen) controls.unlock(); else controls.lock();
-        }
-
-        function closeInventory() {
-            isInventoryOpen = false;
-            document.getElementById('inventory').style.display = 'none';
-            controls.lock();
-        }
-
-        function onKeyDown(e) {
-            if (e.code === 'KeyE') toggleInventory();
-        }
-
-        function onMouseDown(e) {
-            if (!controls.isLocked) return;
+        function performBlockAction(button) {
             raycaster.setFromCamera(new THREE.Vector2(0, 0), camera);
             const intersects = raycaster.intersectObjects(objects);
             if (intersects.length > 0) {
-                const intersect = intersects[0];
-                if (e.button === 0) { // Đập khối
-                    scene.remove(intersect.object);
-                    objects.splice(objects.indexOf(intersect.object), 1);
-                } else if (e.button === 2) { // Đặt khối 1.21.8
-                    const norm = intersect.face.normal;
-                    const pos = intersect.object.position.clone().add(norm);
-                    const selectedBlockId = hotbarSlots[currentHotbarIndex];
-                    createBlockMesh(pos.x, pos.y, pos.z, selectedBlockId);
+                const targetObj = intersects[0].object;
+                const px = targetObj.position.x, py = targetObj.position.y, pz = targetObj.position.z;
+                if (button === 0) {
+                    scene.remove(targetObj); objects.splice(objects.indexOf(targetObj), 1); worldMap.delete(`${px},${py},${pz}`);
+                } else if (button === 2) {
+                    const norm = intersects[0].face.normal;
+                    const selectedBlockKey = hotbarSlots[currentHotbarIndex];
+                    createBlockMesh(px + norm.x, py + norm.y, pz + norm.z, selectedBlockKey);
                 }
             }
         }
 
+        function onMouseDown(event) { if (!controls.isLocked || gameState !== 'PLAYING') return; performBlockAction(event.button); }
+        function setupMobileControls() { if (!isMobile) return; document.getElementById('btn-break').onclick = () => performBlockAction(0); document.getElementById('btn-place').onclick = () => performBlockAction(2); document.getElementById('btn-inv').onclick = () => toggleInventory(); document.getElementById('btn-mobile-pause').onclick = () => switchState('PAUSED'); }
+        function onKeyDown(event) { if (gameState !== 'PLAYING' && gameState !== 'INVENTORY') return; if(event.code === 'KeyE') { toggleInventory(); return; } switch (event.code) { case 'KeyW': moveForward = true; break; case 'KeyA': moveLeft = true; break; case 'KeyS': moveBackward = true; break; case 'KeyD': moveRight = true; break; case 'Space': if (canJump) velocity.y = JUMP_FORCE; break; } }
+        function onWindowResize() { camera.aspect = window.innerWidth / window.innerHeight; camera.updateProjectionMatrix(); renderer.setSize(window.innerWidth, window.innerHeight); }
+
         function animate() {
             requestAnimationFrame(animate);
-            renderer.render(scene, camera);
+            if (gameState === 'PLAYING') {
+                velocity.x -= velocity.x * 10.0 * 0.016; velocity.z -= velocity.z * 10.0 * 0.016; velocity.y -= GRAVITY * 0.016;
+                const player = controls.getObject(); player.position.y += velocity.y * 0.016;
+                if (player.position.y < 2) { player.position.y = 2; velocity.y = 0; canJump = true; }
+                renderer.render(scene, camera);
+            } else renderer.render(scene, menuCamera || camera);
         }
 
-        initEngine();
+        setupUIEvents();
     </script>
 </body>
 </html>
