@@ -1,0 +1,94 @@
+[
+  {
+    "id": 1,
+    "name": "stone",
+    "identifier": "minecraft:stone",
+    "hardness": 1.5,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "all": "stone"
+    }
+  },
+  {
+    "id": 2,
+    "name": "grass_block",
+    "identifier": "minecraft:grass_block",
+    "hardness": 0.6,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "top": "grass_block_top",
+      "side": "grass_block_side",
+      "bottom": "dirt"
+    }
+  },
+  {
+    "id": 3,
+    "name": "dirt",
+    "identifier": "minecraft:dirt",
+    "hardness": 0.5,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "all": "dirt"
+    }
+  },
+  {
+    "id": 4,
+    "name": "oak_log",
+    "identifier": "minecraft:oak_log",
+    "hardness": 2.0,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "top": "oak_log_top",
+      "side": "oak_log",
+      "bottom": "oak_log_top"
+    }
+  },
+  {
+    "id": 5,
+    "name": "oak_leaves",
+    "identifier": "minecraft:oak_leaves",
+    "hardness": 0.2,
+    "solid": true,
+    "transparent": true,
+    "textures": {
+      "all": "oak_leaves"
+    }
+  },
+  {
+    "id": 1050,
+    "name": "dripstone_block",
+    "identifier": "minecraft:dripstone_block",
+    "hardness": 1.5,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "all": "dripstone_block"
+    }
+  },
+  {
+    "id": 1052,
+    "name": "amethyst_block",
+    "identifier": "minecraft:amethyst_block",
+    "hardness": 1.5,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "all": "amethyst_block"
+    }
+  },
+  {
+    "id": 1058,
+    "name": "cherry_planks",
+    "identifier": "minecraft:cherry_planks",
+    "hardness": 2.0,
+    "solid": true,
+    "transparent": false,
+    "textures": {
+      "all": "cherry_planks"
+    }
+  }
+]

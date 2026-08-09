@@ -1,0 +1,12 @@
+{
+  "name": "foxcraft-engine",
+  "version": "9.0.0",
+  "description": "Fox Craft V9.0 Engine with Minecraft Java 1.21.8 Data Loader",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve ."
+  },
+  "author": "FoxST",
+  "license": "MIT"
+}
