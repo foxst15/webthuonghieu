@@ -352,7 +352,7 @@
                 </a>
             </div>
 
-            <!-- TÍCH HỢP KHUNG CHƠI FLASH GAME (ORION SANDBOX ENHANCED VỚI CORS PROXY) -->
+            <!-- TÍCH HỢP KHUNG CHƠI FLASH GAME (ORION SANDBOX ENHANCED - ĐƯỜNG DẪN NỘI BỘ VERCEL) -->
             <div class="mb-12 reveal">
                 <div class="glass-card rounded-3xl p-6 md:p-8 border border-fox-red/30 shadow-[0_0_30px_rgba(255,65,65,0.15)]">
                     <div class="flex items-center justify-between mb-6">
@@ -360,7 +360,7 @@
                             <span class="text-fox-red text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-fox-red/10 border border-fox-red/20">🎮 Trình Chơi Game Flash Trực Tuyến</span>
                             <h3 class="text-2xl md:text-3xl font-black text-white mt-2">Orion Sandbox Enhanced</h3>
                         </div>
-                        <span class="text-xs text-gray-400 hidden md:block">Powered by Ruffle & CORS Proxy</span>
+                        <span class="text-xs text-gray-400 hidden md:block">Powered by Ruffle & Vercel Hosting</span>
                     </div>
                     
                     <!-- Khung chứa game Flash -->
@@ -505,7 +505,7 @@
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
     <script>
-        // Khởi động Ruffle Player kết hợp CORS Proxy để vượt lỗi CORS của GitHub Releases
+        // Khởi động Ruffle Player tải file game trực tiếp từ thư mục nội bộ trên Vercel
         window.RufflePlayer = window.RufflePlayer || {};
         window.addEventListener("load", (event) => {
             const ruffle = window.RufflePlayer.newest();
@@ -515,11 +515,8 @@
                 if(container) {
                     container.appendChild(player);
                     
-                    // Đường dẫn gốc trên GitHub Releases của chủ nhân FoxST
-                    const rawUrl = "https://github.com/foxst15/webthuonghieu/releases/download/v1.0.0/OrionSandboxEnhanced.swf";
-                    
-                    // Load game thông qua CORS Proxy
-                    player.load("https://corsproxy.io/?" + encodeURIComponent(rawUrl));
+                    // Tải tệp game .swf đặt cùng thư mục với index.html
+                    player.load("OrionSandboxEnhanced.swf");
                 }
             }
         });
