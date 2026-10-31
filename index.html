@@ -352,15 +352,15 @@
                 </a>
             </div>
 
-            <!-- TÍCH HỢP KHUNG CHƠI FLASH GAME (RUFFLE) NGAY TRONG THƯ VIỆN -->
+            <!-- TÍCH HỢP KHUNG CHƠI FLASH GAME (ORION SANDBOX ENHANCED) -->
             <div class="mb-12 reveal">
                 <div class="glass-card rounded-3xl p-6 md:p-8 border border-fox-red/30 shadow-[0_0_30px_rgba(255,65,65,0.15)]">
                     <div class="flex items-center justify-between mb-6">
                         <div>
                             <span class="text-fox-red text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full bg-fox-red/10 border border-fox-red/20">🎮 Trình Chơi Game Flash Trực Tuyến</span>
-                            <h3 class="text-2xl md:text-3xl font-black text-white mt-2">Góc Giải Trí Game Cổ Điển</h3>
+                            <h3 class="text-2xl md:text-3xl font-black text-white mt-2">Orion Sandbox Enhanced</h3>
                         </div>
-                        <span class="text-xs text-gray-400 hidden md:block">Được hỗ trợ bởi Ruffle Engine</span>
+                        <span class="text-xs text-gray-400 hidden md:block">Powered by Ruffle & GitHub Releases</span>
                     </div>
                     
                     <!-- Khung chứa game Flash -->
@@ -505,7 +505,7 @@
     <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
 
     <script>
-        // Khởi động Ruffle Player nhúng game.swf vào giao diện
+        // Khởi động Ruffle Player nhúng game Orion Sandbox Enhanced từ GitHub Releases
         window.RufflePlayer = window.RufflePlayer || {};
         window.addEventListener("load", (event) => {
             const ruffle = window.RufflePlayer.newest();
@@ -514,8 +514,8 @@
                 const container = document.getElementById("game-container");
                 if(container) {
                     container.appendChild(player);
-                    // Đường dẫn tới tệp game Flash của chủ nhân
-                    player.load("game.swf");
+                    // Đường dẫn trực tiếp từ GitHub Releases của chủ nhân FoxST
+                    player.load("https://github.com/foxst15/webthuonghieu/releases/download/v1.0.0/OrionSandboxEnhanced.swf");
                 }
             }
         });
